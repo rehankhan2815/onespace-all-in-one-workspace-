@@ -1,0 +1,69 @@
+/* Dashboard specific styles */
+.activity-item {
+  border-left: 3px solid #c7c4d8;
+  padding-left: 1rem;
+  margin-bottom: 0.75rem;
+}
+.activity-item:last-child { margin-bottom: 0; }
+
+/* Summary card icons */
+.icon-bg {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.icon-bg.bg-primary { background-color: #3525cd; color: #ffffff; }
+.icon-bg.bg-success { background-color: #198754; color: #ffffff; }
+.icon-bg.bg-warning { background-color: #fd7e14; color: #ffffff; }
+.icon-bg.bg-info { background-color: #0dcaf0; color: #ffffff; }
+.icon-bg.bg-secondary { background-color: #505f76; color: #ffffff; }
+.text-white { color: #ffffff !important; }
+
+#summaryCards .card {
+  text-decoration: none;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+#summaryCards .card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* List group item styling for Tailwind compatibility */
+.list-group-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid #c7c4d8;
+  transition: background-color 0.15s;
+  text-decoration: none;
+  color: inherit;
+}
+.list-group-item:last-child { border-bottom: none; }
+.list-group-item:hover { background-color: #f6f3f2; }
+.list-group-item h6 { margin: 0; font-weight: 600; font-size: 14px; }
+.list-group-item p { margin: 0; font-size: 13px; color: #464555; }
+.list-group-item small { font-size: 12px; color: #777587; }
+
+/* Badge styling */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1;
+}
+.badge.bg-success { background-color: #d4edda; color: #155724; }
+.badge.bg-primary { background-color: #d0e1fb; color: #3525cd; }
+.badge.bg-secondary { background-color: #e5e2e1; color: #464555; }
+.badge.bg-light { background-color: #f0edec; }
+.badge.bg-warning { background-color: #ffdbcc; color: #7e3000; }
+.badge.text-danger { color: #ba1a1a; }
+.badge.text-warning { color: #7e3000; }
+.badge.text-info { color: #505f76; }

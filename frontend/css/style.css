@@ -1,0 +1,326 @@
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css");
+
+/* Global OneSpace styles - Tailwind compatible */
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* Bootstrap compatibility - display classes used by JS files */
+.d-none { display: none !important; }
+.d-block { display: block !important; }
+.d-flex { display: flex !important; }
+
+/* Material Symbols base style */
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Toast container positioning */
+.toast-container {
+  z-index: 200;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background-color: #c7c4d8; border-radius: 10px; }
+
+/* Bootstrap modal overlay styles */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1055;
+  display: none;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  outline: 0;
+}
+.modal.show {
+  display: block;
+}
+.modal-dialog {
+  position: relative;
+  width: auto;
+  margin: 1.75rem auto;
+  pointer-events: none;
+  max-width: 500px;
+  padding: 0 16px;
+}
+.modal-dialog.modal-dialog-centered {
+  display: flex;
+  align-items: center;
+  min-height: calc(100% - 3.5rem);
+}
+.modal-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  pointer-events: auto;
+}
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1050;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+}
+.modal-backdrop.fade {
+  opacity: 0;
+  transition: opacity 0.15s linear;
+}
+.modal-backdrop.show {
+  opacity: 1;
+}
+body.modal-open {
+  overflow: hidden;
+}
+
+/* Card styles (used by notes, resources, dashboard) */
+.card {
+  background-color: #fcf9f8;
+  border: 1px solid #c7c4d8;
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: box-shadow 0.2s, border-color 0.2s;
+}
+.card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+.card-body {
+  padding: 1.25rem;
+  flex: 1 1 auto;
+}
+.card-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1c1b1b;
+  margin-bottom: 0.5rem;
+}
+.card-text {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: #464555;
+}
+
+/* Button & Button Group styles */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.5;
+  border-radius: 0.5rem;
+  border: 1px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.15s ease-in-out;
+}
+.btn-sm {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  border-radius: 0.375rem;
+}
+.btn-primary {
+  background-color: #3525cd;
+  color: #ffffff;
+  border-color: #3525cd;
+}
+.btn-primary:hover {
+  background-color: #2b1ea6;
+  border-color: #2b1ea6;
+}
+.btn-outline-primary {
+  color: #3525cd;
+  border-color: #3525cd;
+  background-color: transparent;
+}
+.btn-outline-primary:hover {
+  background-color: #3525cd;
+  color: #ffffff;
+}
+.btn-outline-secondary {
+  color: #505f76;
+  border-color: #c7c4d8;
+  background-color: transparent;
+}
+.btn-outline-secondary:hover {
+  background-color: #ebe7e7;
+  color: #1c1b1b;
+}
+.btn-outline-danger {
+  color: #ba1a1a;
+  border-color: #ffdad6;
+  background-color: transparent;
+}
+.btn-outline-danger:hover {
+  background-color: #ba1a1a;
+  color: #ffffff;
+}
+.btn:disabled, .btn.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+.btn-group {
+  display: inline-flex;
+  gap: 0.25rem;
+}
+.btn-group-sm > .btn {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+}
+
+/* Table padding & alignment */
+table td {
+  padding: 12px 16px;
+  vertical-align: middle;
+}
+table th {
+  padding: 10px 16px;
+}
+
+/* List group */
+.list-group {
+  display: flex;
+  flex-direction: column;
+  background: #fcf9f8;
+  border: 1px solid #c7c4d8;
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+/* Form validation */
+.was-validated .form-control:invalid,
+.form-control.is-invalid {
+  border-color: #ba1a1a;
+}
+.was-validated .form-select:invalid,
+.form-select.is-invalid {
+  border-color: #ba1a1a;
+}
+
+/* invalid-feedback show/hide */
+.invalid-feedback {
+  display: none;
+  font-size: 12px;
+  margin-top: 4px;
+}
+.was-validated :invalid ~ .invalid-feedback {
+  display: block;
+}
+
+/* btn-close minimal styling */
+.btn-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  line-height: 1;
+  opacity: 0.5;
+  padding: 4px;
+}
+.btn-close:hover { opacity: 1; }
+
+/* Bootstrap toast background classes (used by utils.js) */
+.text-bg-success { background-color: #d4edda; color: #155724; }
+.text-bg-danger { background-color: #f8d7da; color: #721c24; }
+.text-bg-warning { background-color: #fff3cd; color: #856404; }
+.toast {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  font-size: 14px;
+  font-weight: 500;
+}
+.toast-body { flex: 1; }
+.btn-close-white { filter: brightness(0) invert(1); }
+
+/* Status select in tasks table */
+.status-select {
+  min-width: 120px;
+  padding: 4px 8px;
+  border-radius: 0.25rem;
+  border: 1px solid #c7c4d8;
+  background: #fcf9f8;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.status-select:focus {
+  outline: none;
+  border-color: #3525cd;
+  box-shadow: 0 0 0 1px #3525cd;
+}
+
+/* Form select / control base styles (used by Bootstrap class names in JS) */
+.form-select, .form-control {
+  display: block;
+  width: 100%;
+  padding: 8px 12px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #1c1b1b;
+  background-color: #fcf9f8;
+  border: 1px solid #c7c4d8;
+  border-radius: 0.25rem;
+  transition: border-color 0.15s;
+}
+.form-select:focus, .form-control:focus {
+  border-color: #3525cd;
+  outline: 0;
+  box-shadow: 0 0 0 2px rgba(53, 37, 205, 0.2);
+}
+.form-select-sm {
+  padding: 4px 8px;
+  font-size: 12px;
+}
+.form-select-sm.form-select {
+  padding-right: 28px;
+}
+
+/* Utility classes used by JS-rendered HTML */
+.text-muted { color: #777587; }
+.small { font-size: 12px; }
+.text-danger { color: #ba1a1a; }
+.text-warning { color: #7e3000; }
+.text-info { color: #505f76; }
+.text-success { color: #155724; }
+.text-end { text-align: right; }
+.text-decoration-none { text-decoration: none !important; }
+.h-100 { height: 100% !important; }
+.rounded-circle { border-radius: 50% !important; }
+mark, .bg-warning {
+  background-color: #ffd2be;
+  color: #7b2f00;
+  padding: 0 3px;
+  border-radius: 2px;
+}
