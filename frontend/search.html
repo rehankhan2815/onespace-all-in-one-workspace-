@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>OneSpace - Search</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      "colors": {
+        "surface-variant": "#e5e2e1", "on-primary-container": "#dad7ff", "secondary-container": "#d0e1fb",
+        "surface": "#fcf9f8", "secondary": "#505f76", "inverse-surface": "#313030",
+        "secondary-fixed-dim": "#b7c8e1", "background": "#fcf9f8", "on-tertiary": "#ffffff",
+        "inverse-on-surface": "#f3f0ef", "on-surface": "#1c1b1b", "tertiary-fixed": "#ffdbcc",
+        "on-error": "#ffffff", "surface-container-low": "#f6f3f2", "primary": "#3525cd",
+        "secondary-fixed": "#d3e4fe", "error-container": "#ffdad6", "inverse-primary": "#c3c0ff",
+        "on-error-container": "#93000a", "surface-bright": "#fcf9f8", "tertiary-container": "#a44100",
+        "on-tertiary-fixed": "#351000", "surface-container-lowest": "#ffffff",
+        "on-secondary-container": "#54647a", "primary-fixed-dim": "#c3c0ff",
+        "on-primary-fixed": "#0f0069", "tertiary-fixed-dim": "#ffb695",
+        "on-surface-variant": "#464555", "primary-fixed": "#e2dfff", "surface-tint": "#4d44e3",
+        "on-tertiary-container": "#ffd2be", "on-secondary-fixed": "#0b1c30",
+        "surface-dim": "#dcd9d9", "surface-container-highest": "#e5e2e1",
+        "on-background": "#1c1b1b", "surface-container-high": "#ebe7e7",
+        "surface-container": "#f0edec", "outline": "#777587", "tertiary": "#7e3000",
+        "on-secondary-fixed-variant": "#38485d", "on-tertiary-fixed-variant": "#7b2f00",
+        "error": "#ba1a1a", "on-secondary": "#ffffff", "outline-variant": "#c7c4d8",
+        "on-primary": "#ffffff", "primary-container": "#4f46e5",
+        "on-primary-fixed-variant": "#3323cc"
+      },
+      "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+      "spacing": { "lg": "24px", "xl": "32px", "base-unit": "4px", "xs": "4px", "gutter": "24px", "margin": "24px", "sm": "8px", "md": "16px" },
+      "fontFamily": { "display-lg": ["Inter"], "label-sm": ["Inter"], "headline-sm": ["Inter"], "headline-md": ["Inter"], "body-lg": ["Inter"], "body-md": ["Inter"], "label-caps": ["Inter"] },
+      "fontSize": {
+        "display-lg": ["32px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+        "label-sm": ["12px", { "lineHeight": "1", "fontWeight": "500" }],
+        "headline-sm": ["18px", { "lineHeight": "1.4", "fontWeight": "600" }],
+        "headline-md": ["24px", { "lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+        "body-lg": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+        "body-md": ["14px", { "lineHeight": "1.5", "fontWeight": "400" }],
+        "label-caps": ["12px", { "lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600" }]
+      }
+    }
+  }
+}
+</script>
+<link href="css/style.css" rel="stylesheet"/>
+<link href="css/dashboard.css" rel="stylesheet"/>
+<style>.material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }</style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex antialiased">
+
+<!-- Main Content -->
+<main class="flex-1 md:ml-[280px] p-lg max-w-7xl mx-auto w-full min-h-screen flex flex-col gap-gutter">
+  <!-- Header -->
+  <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-md pt-md">
+    <div>
+      <nav class="flex items-center gap-sm font-label-sm text-label-sm text-on-surface-variant mb-1">
+        <a class="hover:text-primary transition-colors" href="workspaces.html">Workspaces</a>
+        <span class="material-symbols-outlined text-sm">chevron_right</span>
+        <a class="hover:text-primary transition-colors" href="#" id="dashboardLink">Dashboard</a>
+        <span class="material-symbols-outlined text-sm">chevron_right</span>
+        <span class="text-on-surface">Search</span>
+      </nav>
+      <h2 class="font-headline-md text-headline-md text-on-surface">Search</h2>
+      <p class="font-body-md text-body-md text-on-surface-variant mt-1">Search across tasks, notes, resources, and files.</p>
+    </div>
+    <a href="#" class="hidden sm:flex items-center gap-2 px-md py-1.5 border border-outline-variant rounded-lg bg-surface text-on-surface hover:bg-surface-container-low transition-colors font-label-sm text-label-sm" id="backDashboard">
+      <span class="material-symbols-outlined text-[16px]">arrow_back</span> Back
+    </a>
+  </header>
+
+  <!-- Search Input -->
+  <div class="bg-surface rounded-xl border border-outline-variant p-md">
+    <div class="relative">
+      <span class="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none" style="font-size: 20px;">search</span>
+      <input class="w-full pl-xl pr-xl py-sm bg-surface-container-low border border-outline-variant rounded-DEFAULT font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors h-[48px]" placeholder="Search tasks, notes, resources, files..." type="search" id="searchInput" autocomplete="off"/>
+      <button class="absolute right-md top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-on-surface p-1 rounded-full hover:bg-surface-container-high transition-colors" type="button" id="clearSearch">
+        <span class="material-symbols-outlined text-[18px]">close</span>
+      </button>
+    </div>
+    <p class="font-body-md text-body-md text-on-surface-variant mt-2">Search is case-insensitive and matches titles, descriptions, and content.</p>
+  </div>
+
+  <!-- Search Results -->
+  <div id="searchResults" class="flex flex-col gap-gutter"></div>
+
+  <!-- Empty State -->
+  <div id="searchEmpty" class="d-none">
+    <div class="bg-surface-variant/30 rounded-lg border border-dashed border-outline-variant p-xl flex flex-col items-center justify-center gap-md text-center min-h-[200px]">
+      <span class="material-symbols-outlined text-on-surface-variant/40 text-[48px]">search_off</span>
+      <div>
+        <h3 class="font-headline-sm text-headline-sm text-on-surface">No results found</h3>
+        <p class="font-body-md text-body-md text-on-surface-variant mt-xs">Try a different query.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Initial State -->
+  <div id="searchInitial" class="text-center py-xl">
+    <span class="material-symbols-outlined text-on-surface-variant/30 text-[64px] block mb-4">search</span>
+    <h3 class="font-headline-md text-headline-md text-on-surface mb-2">Start searching</h3>
+    <p class="font-body-lg text-body-lg text-on-surface-variant max-w-md mx-auto">Enter a keyword above to search across all workspace content.</p>
+  </div>
+</main>
+
+<!-- Toast Container -->
+<div id="toast-container" class="fixed bottom-20 md:bottom-8 right-4 z-[200] flex flex-col gap-sm"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script src="js/config.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/mock-data.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/api.js"></script>
+<script src="js/sidebar.js"></script>
+<script src="js/search.js"></script>
+</body>
+</html>

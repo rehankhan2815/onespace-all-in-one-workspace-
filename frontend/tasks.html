@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>OneSpace - Tasks</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      "colors": {
+        "surface-variant": "#e5e2e1", "on-primary-container": "#dad7ff", "secondary-container": "#d0e1fb",
+        "surface": "#fcf9f8", "secondary": "#505f76", "inverse-surface": "#313030",
+        "secondary-fixed-dim": "#b7c8e1", "background": "#fcf9f8", "on-tertiary": "#ffffff",
+        "inverse-on-surface": "#f3f0ef", "on-surface": "#1c1b1b", "tertiary-fixed": "#ffdbcc",
+        "on-error": "#ffffff", "surface-container-low": "#f6f3f2", "primary": "#3525cd",
+        "secondary-fixed": "#d3e4fe", "error-container": "#ffdad6", "inverse-primary": "#c3c0ff",
+        "on-error-container": "#93000a", "surface-bright": "#fcf9f8", "tertiary-container": "#a44100",
+        "on-tertiary-fixed": "#351000", "surface-container-lowest": "#ffffff",
+        "on-secondary-container": "#54647a", "primary-fixed-dim": "#c3c0ff",
+        "on-primary-fixed": "#0f0069", "tertiary-fixed-dim": "#ffb695",
+        "on-surface-variant": "#464555", "primary-fixed": "#e2dfff", "surface-tint": "#4d44e3",
+        "on-tertiary-container": "#ffd2be", "on-secondary-fixed": "#0b1c30",
+        "surface-dim": "#dcd9d9", "surface-container-highest": "#e5e2e1",
+        "on-background": "#1c1b1b", "surface-container-high": "#ebe7e7",
+        "surface-container": "#f0edec", "outline": "#777587", "tertiary": "#7e3000",
+        "on-secondary-fixed-variant": "#38485d", "on-tertiary-fixed-variant": "#7b2f00",
+        "error": "#ba1a1a", "on-secondary": "#ffffff", "outline-variant": "#c7c4d8",
+        "on-primary": "#ffffff", "primary-container": "#4f46e5",
+        "on-primary-fixed-variant": "#3323cc"
+      },
+      "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+      "spacing": { "lg": "24px", "xl": "32px", "base-unit": "4px", "xs": "4px", "gutter": "24px", "margin": "24px", "sm": "8px", "md": "16px" },
+      "fontFamily": { "display-lg": ["Inter"], "label-sm": ["Inter"], "headline-sm": ["Inter"], "headline-md": ["Inter"], "body-lg": ["Inter"], "body-md": ["Inter"], "label-caps": ["Inter"] },
+      "fontSize": {
+        "display-lg": ["32px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+        "label-sm": ["12px", { "lineHeight": "1", "fontWeight": "500" }],
+        "headline-sm": ["18px", { "lineHeight": "1.4", "fontWeight": "600" }],
+        "headline-md": ["24px", { "lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+        "body-lg": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+        "body-md": ["14px", { "lineHeight": "1.5", "fontWeight": "400" }],
+        "label-caps": ["12px", { "lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600" }]
+      }
+    }
+  }
+}
+</script>
+<link href="css/style.css" rel="stylesheet"/>
+<link href="css/dashboard.css" rel="stylesheet"/>
+<style>.material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }</style>
+</head>
+<body class="bg-background text-on-background font-body-md h-screen overflow-hidden flex antialiased transition-colors duration-200">
+
+<!-- Main Content -->
+<main class="flex-1 md:ml-[280px] h-screen overflow-y-auto bg-background pt-16 md:pt-0">
+  <!-- Sticky Header -->
+  <div class="sticky top-0 z-30 bg-background/90 backdrop-blur-sm border-b border-outline-variant/50 px-lg py-md flex justify-between items-center">
+    <div>
+      <nav class="flex items-center gap-sm font-label-sm text-label-sm text-on-surface-variant mb-1">
+        <a class="hover:text-primary transition-colors" href="workspaces.html">Workspaces</a>
+        <span class="material-symbols-outlined text-sm">chevron_right</span>
+        <a class="hover:text-primary transition-colors" href="#" id="dashboardLink">Dashboard</a>
+        <span class="material-symbols-outlined text-sm">chevron_right</span>
+        <span class="text-on-surface">Tasks</span>
+      </nav>
+      <h2 class="font-headline-md text-headline-md text-on-background">Tasks</h2>
+    </div>
+    <div class="flex items-center gap-sm">
+      <a href="#" class="hidden sm:flex items-center gap-2 px-md py-1.5 border border-outline-variant rounded-lg bg-surface text-on-surface hover:bg-surface-container-low transition-colors font-label-sm text-label-sm" id="backDashboard">
+        <span class="material-symbols-outlined text-[16px]">arrow_back</span> Back
+      </a>
+      <button class="bg-primary hover:bg-primary-container text-on-primary h-[36px] px-md rounded-lg font-headline-sm text-label-sm flex items-center gap-2 transition-colors" id="addTaskBtn" type="button">
+        <span class="material-symbols-outlined text-[18px]">add</span> New Task
+      </button>
+    </div>
+  </div>
+
+  <div class="p-lg max-w-7xl mx-auto">
+    <!-- Filter Bar -->
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-lg">
+      <div class="flex bg-surface-container-low rounded-lg p-1 border border-outline-variant/30">
+        <select id="statusFilter" class="bg-surface shadow-sm font-label-sm text-label-sm text-on-surface border border-outline-variant/20 rounded-md px-md py-1.5 focus:outline-none focus:border-primary cursor-pointer">
+          <option value="">All Status</option>
+          <option value="To Do">To Do</option>
+          <option value="In Progress">In Progress</option>
+          <option value="Done">Done</option>
+        </select>
+        <select id="priorityFilter" class="bg-surface shadow-sm font-label-sm text-label-sm text-on-surface border border-outline-variant/20 rounded-md px-md py-1.5 focus:outline-none focus:border-primary cursor-pointer ml-2">
+          <option value="">All Priority</option>
+          <option value="High">High</option>
+          <option value="Medium">Medium</option>
+          <option value="Low">Low</option>
+        </select>
+      </div>
+      <div class="relative flex-1 sm:max-w-xs">
+        <span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">search</span>
+        <input class="w-full pl-xl pr-8 py-sm rounded-DEFAULT border border-outline-variant dark:border-outline bg-surface dark:bg-surface-container-low text-on-surface dark:text-inverse-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none font-body-md text-body-md transition-shadow placeholder:text-on-surface-variant" id="searchInput" placeholder="Search tasks..." type="search"/>
+        <button class="absolute right-2 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-on-surface" type="button" id="clearSearch">
+          <span class="material-symbols-outlined text-[18px]">close</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Tasks Table -->
+    <div id="tasksCard" class="bg-surface border border-outline-variant rounded-xl overflow-hidden shadow-sm">
+      <table class="w-full">
+        <thead class="bg-surface-container-low border-b border-outline-variant">
+          <tr>
+            <th class="px-md py-sm text-left font-label-sm text-label-sm text-on-surface-variant">Title</th>
+            <th class="px-md py-sm text-left font-label-sm text-label-sm text-on-surface-variant">Status</th>
+            <th class="px-md py-sm text-left font-label-sm text-label-sm text-on-surface-variant hidden sm:table-cell">Priority</th>
+            <th class="px-md py-sm text-left font-label-sm text-label-sm text-on-surface-variant hidden md:table-cell">Due Date</th>
+            <th class="px-md py-sm text-right font-label-sm text-label-sm text-on-surface-variant">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="tasksBody" class="divide-y divide-outline-variant/50"></tbody>
+      </table>
+      <div id="tasksEmpty" class="d-none p-xl text-center">
+        <span class="material-symbols-outlined text-on-surface-variant/40 text-[48px] block mb-2">checklist</span>
+        <h3 class="font-headline-sm text-headline-sm text-on-surface mb-1">No tasks yet</h3>
+        <p class="font-body-md text-body-md text-on-surface-variant mb-4">Create your first task to get started.</p>
+        <button class="bg-primary hover:bg-primary-container text-on-primary h-[36px] px-md rounded-lg font-headline-sm text-label-sm flex items-center gap-2 transition-colors mx-auto" id="emptyAddTaskBtn" type="button">
+          <span class="material-symbols-outlined text-[18px]">add</span> New Task
+        </button>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- Task Modal (Bootstrap compatible) -->
+<div class="modal fade" id="taskModal" tabindex="-1" aria-labelledby="taskModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content bg-surface border border-outline-variant rounded-xl shadow-xl">
+      <div class="modal-header border-b border-outline-variant px-lg py-md">
+        <h5 class="modal-title font-headline-md text-headline-md text-on-surface" id="taskModalLabel">New Task</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="taskForm" class="needs-validation" novalidate>
+        <input type="hidden" id="taskId" name="id"/>
+        <div class="modal-body px-lg py-lg space-y-lg">
+          <div class="space-y-1">
+            <label for="taskTitle" class="font-label-sm text-label-sm text-on-surface-variant block">Task Title <span class="text-error">*</span></label>
+            <input type="text" class="w-full bg-surface border border-outline-variant rounded-lg px-md py-2 font-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors placeholder:text-outline" id="taskTitle" name="title" placeholder="E.g., Complete Chapter 4 Draft" required maxlength="200"/>
+            <div class="invalid-feedback">Title is required.</div>
+          </div>
+          <div class="space-y-1">
+            <label for="taskDescription" class="font-label-sm text-label-sm text-on-surface-variant block">Description</label>
+            <textarea class="w-full bg-surface border border-outline-variant rounded-lg px-md py-2 font-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors placeholder:text-outline resize-none" id="taskDescription" name="description" rows="3" placeholder="Add details..." maxlength="1000"></textarea>
+          </div>
+          <div class="grid grid-cols-2 gap-md">
+            <div class="space-y-1">
+              <label for="taskStatus" class="font-label-sm text-label-sm text-on-surface-variant block">Status</label>
+              <select class="w-full bg-surface border border-outline-variant rounded-lg pl-md pr-8 py-2 font-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary appearance-none cursor-pointer" id="taskStatus" name="status">
+                <option value="To Do">To Do</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Done">Done</option>
+              </select>
+            </div>
+            <div class="space-y-1">
+              <label for="taskPriority" class="font-label-sm text-label-sm text-on-surface-variant block">Priority</label>
+              <select class="w-full bg-surface border border-outline-variant rounded-lg pl-md pr-8 py-2 font-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary appearance-none cursor-pointer" id="taskPriority" name="priority">
+                <option value="Low">Low</option>
+                <option value="Medium" selected>Medium</option>
+                <option value="High">High</option>
+              </select>
+            </div>
+          </div>
+          <div class="space-y-1">
+            <label for="taskDueDate" class="font-label-sm text-label-sm text-on-surface-variant block">Due Date</label>
+            <div class="relative">
+              <input class="w-full bg-surface border border-outline-variant rounded-lg pl-10 pr-md py-2 font-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors cursor-pointer" type="date" id="taskDueDate" name="due_date"/>
+              <span class="material-symbols-outlined absolute left-3 top-2.5 text-on-surface-variant pointer-events-none text-[18px]">calendar_month</span>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer border-t border-outline-variant px-lg py-md flex justify-end gap-md">
+          <button type="button" class="px-md py-2 rounded-lg font-headline-sm text-label-sm border border-outline-variant text-on-surface hover:bg-surface-container-low transition-colors h-[44px]" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="px-md py-2 rounded-lg font-headline-sm text-label-sm bg-primary text-on-primary hover:bg-primary-container transition-colors h-[44px] flex items-center gap-sm" id="taskSubmit">
+            <span class="btn-text">Save</span>
+            <span class="btn-loading d-none"><span class="w-4 h-4 border-2 border-on-primary/30 border-t-on-primary rounded-full animate-spin inline-block"></span> Saving...</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Toast Container -->
+<div id="toast-container" class="fixed bottom-20 md:bottom-8 right-4 z-[200] flex flex-col gap-sm"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script src="js/config.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/mock-data.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/api.js"></script>
+<script src="js/sidebar.js"></script>
+<script src="js/tasks.js"></script>
+</body>
+</html>
