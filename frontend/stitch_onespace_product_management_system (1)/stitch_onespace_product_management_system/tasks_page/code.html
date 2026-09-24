@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>OneSpace - Tasks</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-variant": "#e5e2e1",
+                        "on-primary-container": "#dad7ff",
+                        "secondary-container": "#d0e1fb",
+                        "surface": "#fcf9f8",
+                        "secondary": "#505f76",
+                        "inverse-surface": "#313030",
+                        "secondary-fixed-dim": "#b7c8e1",
+                        "background": "#fcf9f8",
+                        "on-tertiary": "#ffffff",
+                        "inverse-on-surface": "#f3f0ef",
+                        "on-surface": "#1c1b1b",
+                        "tertiary-fixed": "#ffdbcc",
+                        "on-error": "#ffffff",
+                        "surface-container-low": "#f6f3f2",
+                        "primary": "#3525cd",
+                        "secondary-fixed": "#d3e4fe",
+                        "error-container": "#ffdad6",
+                        "inverse-primary": "#c3c0ff",
+                        "on-error-container": "#93000a",
+                        "surface-bright": "#fcf9f8",
+                        "tertiary-container": "#a44100",
+                        "on-tertiary-fixed": "#351000",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-container": "#54647a",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "on-primary-fixed": "#0f0069",
+                        "tertiary-fixed-dim": "#ffb695",
+                        "on-surface-variant": "#464555",
+                        "primary-fixed": "#e2dfff",
+                        "surface-tint": "#4d44e3",
+                        "on-tertiary-container": "#ffd2be",
+                        "on-secondary-fixed": "#0b1c30",
+                        "surface-dim": "#dcd9d9",
+                        "surface-container-highest": "#e5e2e1",
+                        "on-background": "#1c1b1b",
+                        "surface-container-high": "#ebe7e7",
+                        "surface-container": "#f0edec",
+                        "outline": "#777587",
+                        "tertiary": "#7e3000",
+                        "on-secondary-fixed-variant": "#38485d",
+                        "on-tertiary-fixed-variant": "#7b2f00",
+                        "error": "#ba1a1a",
+                        "on-secondary": "#ffffff",
+                        "outline-variant": "#c7c4d8",
+                        "on-primary": "#ffffff",
+                        "primary-container": "#4f46e5",
+                        "on-primary-fixed-variant": "#3323cc"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "lg": "24px",
+                        "xl": "32px",
+                        "base-unit": "4px",
+                        "xs": "4px",
+                        "gutter": "24px",
+                        "margin": "24px",
+                        "sm": "8px",
+                        "md": "16px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "label-caps": ["Inter"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["32px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-sm": ["12px", { "lineHeight": "1", "fontWeight": "500" }],
+                        "headline-sm": ["18px", { "lineHeight": "1.4", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-lg": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "body-md": ["14px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "label-caps": ["12px", { "lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined[data-weight="fill"] {
+            font-variation-settings: 'FILL' 1;
+        }
+        
+        /* Custom Scrollbar for slide-over */
+        .slide-over-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+        .slide-over-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .slide-over-scroll::-webkit-scrollbar-thumb {
+            background-color: #c7c4d8;
+            border-radius: 10px;
+        }
+        .dark .slide-over-scroll::-webkit-scrollbar-thumb {
+            background-color: #464555;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md h-screen overflow-hidden flex transition-colors duration-200">
+<!-- TopAppBar (Mobile Only) -->
+<header class="md:hidden flex justify-between items-center w-full px-lg sticky top-0 z-50 bg-surface/80 backdrop-blur-md border-b border-outline-variant dark:border-outline h-16 fixed top-0 left-0">
+<div class="font-headline-sm text-headline-sm font-bold text-primary dark:text-inverse-primary">OneSpace</div>
+<div class="flex items-center gap-2">
+<button class="hover:bg-surface-container-high rounded-full p-2 transition-all text-on-surface-variant hover:text-on-surface Active: scale-95 duration-150">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+</button>
+<button class="hover:bg-surface-container-high rounded-full p-2 transition-all text-on-surface-variant hover:text-on-surface Active: scale-95 duration-150">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<img class="w-8 h-8 rounded-full ml-2 object-cover border border-outline-variant" data-alt="A small circular user avatar showing a smiling person in a professional yet relaxed setting, bright lighting, high quality." src="https://lh3.googleusercontent.com/aida-public/AB6AXuClbyaF9Osmv25r7uiYj_dlSfC3BTTCXOsGjt50XL3c5IZcu4PH-5-wevpFjn4TTfE6JN6ftjXMPNxiQDczWrZghP69uUdUUaqkMmh4XeSlA3R2oydD8Iru_hbNBRjvVL_rVmlTPTaphf2YqgkkNqmNArP0BQXWPgin8RSHxO7G3uxsZEwRBZAMQZWN_5-75nhzke2E_i6lh_YOExTzZvu98kfEdZOju80i4sDlQgZWqf7S11F7DUal"/>
+</div>
+</header>
+<!-- SideNavBar (Desktop) -->
+<nav class="fixed left-0 top-0 h-screen hidden md:flex flex-col z-40 bg-surface dark:bg-surface-container-low border-r border-outline-variant dark:border-outline w-[280px]">
+<div class="p-lg flex items-center gap-sm">
+<img alt="Workspace Logo" class="w-10 h-10 rounded-lg shadow-sm" data-alt="A crisp, minimal logo for OneSpace, featuring abstract geometric shapes in indigo and dark grey, high contrast." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCJTsG-dYm24p_X2O-tPkNNMZKhfxayVmbP9t5PFG4FeA_7zeAiJucbOv9sW7p7yND9hC3jfVIV0TvsLmM6pg8reqevBfDx3sObWntJVLHLLLYr8k1VK2OcatQ60bo0NWcrGDl_hTj66dq09SwVGkInBJcbQugC-EAbv-sAGwsgLopXgzIT5LSi6oj6Sk7qWwbeY7UlL6ZPhVGXZhaCGXhdT4H5kl1v6GnOwPw6S6uPB4pZC9Mg8HB8"/>
+<div>
+<h1 class="font-display-lg text-display-lg font-bold text-primary dark:text-inverse-primary text-xl tracking-tight">OneSpace</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Academic Workspace</p>
+</div>
+</div>
+<div class="px-md mb-md">
+<button class="w-full bg-primary hover:bg-primary-container text-on-primary hover:text-on-primary-container font-headline-sm text-headline-sm h-11 rounded-lg flex items-center justify-center gap-2 transition-colors duration-200" onclick="toggleSlideOver()">
+<span class="material-symbols-outlined text-[20px]" data-icon="add">add</span>
+                New Project
+            </button>
+</div>
+<div class="flex-1 overflow-y-auto font-body-md text-body-md py-sm">
+<ul class="space-y-1">
+<li>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200 mx-sm rounded-md" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+                        Dashboard
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-sm bg-secondary-container text-on-secondary-container border-l-4 border-primary mx-sm rounded-r-md transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="checklist" data-weight="fill">checklist</span>
+                        Tasks
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200 mx-sm rounded-md" href="#">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+                        Notes
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200 mx-sm rounded-md" href="#">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+                        Resources
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200 mx-sm rounded-md" href="#">
+<span class="material-symbols-outlined" data-icon="folder">folder</span>
+                        Files
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200 mx-sm rounded-md" href="#">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+                        Search
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200 mx-sm rounded-md" href="#">
+<span class="material-symbols-outlined" data-icon="pulse">switch_account</span>
+                        Activity
+                    </a>
+</li>
+</ul>
+</div>
+<div class="mt-auto p-sm border-t border-outline-variant dark:border-outline">
+<ul class="space-y-1">
+<li>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200 mx-sm rounded-md" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+                        Settings
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200 mx-sm rounded-md" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+                        Support
+                    </a>
+</li>
+</ul>
+</div>
+</nav>
+<!-- Main Content -->
+<main class="flex-1 md:ml-[280px] h-screen overflow-y-auto bg-background pt-16 md:pt-0">
+<!-- Header -->
+<div class="sticky top-0 z-30 bg-background/90 backdrop-blur-sm border-b border-outline-variant/50 px-lg py-md flex justify-between items-center">
+<h2 class="font-headline-md text-headline-md text-on-background">Tasks</h2>
+<button class="bg-primary hover:bg-primary-container text-on-primary h-[36px] px-md rounded-lg font-headline-sm text-label-sm flex items-center gap-2 transition-colors" onclick="toggleSlideOver()">
+<span class="material-symbols-outlined text-[18px]" data-icon="add">add</span>
+                New Task
+            </button>
+</div>
+<div class="p-lg max-w-7xl mx-auto">
+<!-- Filter Bar -->
+<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-lg">
+<div class="flex bg-surface-container-low rounded-lg p-1 border border-outline-variant/30">
+<button class="px-md py-1.5 rounded-md bg-surface shadow-sm font-label-sm text-label-sm text-on-surface border border-outline-variant/20 transition-all">All</button>
+<button class="px-md py-1.5 rounded-md hover:bg-surface-container-high font-label-sm text-label-sm text-on-surface-variant transition-all">To Do</button>
+<button class="px-md py-1.5 rounded-md hover:bg-surface-container-high font-label-sm text-label-sm text-on-surface-variant transition-all">In Progress</button>
+<button class="px-md py-1.5 rounded-md hover:bg-surface-container-high font-label-sm text-label-sm text-on-surface-variant transition-all">Done</button>
+</div>
+<div class="flex gap-sm">
+<button class="flex items-center gap-2 px-sm py-1.5 border border-outline-variant rounded-lg bg-surface text-on-surface hover:bg-surface-container-low transition-colors font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px]" data-icon="filter_list">filter_list</span>
+                        Priority
+                    </button>
+<button class="flex items-center gap-2 px-sm py-1.5 border border-outline-variant rounded-lg bg-surface text-on-surface hover:bg-surface-container-low transition-colors font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px]" data-icon="sort">sort</span>
+                        Sort
+                    </button>
+</div>
+</div>
+<!-- Task List -->
+<div class="space-y-lg pb-24 md:pb-0">
+<!-- Group: To Do -->
+<div class="bg-surface border border-outline-variant rounded-xl overflow-hidden shadow-sm">
+<div class="bg-surface-container-low px-md py-sm border-b border-outline-variant flex justify-between items-center cursor-pointer hover:bg-surface-container transition-colors">
+<h3 class="font-headline-sm text-headline-sm text-on-surface flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-secondary-container inline-block"></span>
+                            To Do <span class="text-on-surface-variant text-sm font-normal ml-2">(2)</span>
+</h3>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="expand_more">expand_more</span>
+</div>
+<div class="divide-y divide-outline-variant/50">
+<!-- Task Row -->
+<div class="group flex items-center p-md hover:bg-surface-container-lowest transition-colors gap-md">
+<input class="w-5 h-5 rounded border-outline text-primary focus:ring-primary bg-surface transition-colors cursor-pointer" type="checkbox"/>
+<div class="flex-1 min-w-0">
+<p class="font-headline-sm text-body-md text-on-surface truncate group-hover:text-primary transition-colors">Review Q3 Research Paper Draft</p>
+</div>
+<div class="hidden sm:flex items-center gap-3">
+<span class="px-2 py-0.5 rounded-full bg-error-container text-on-error-container font-label-caps text-[10px] flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-on-error-container"></span>High
+                                </span>
+<span class="px-2 py-0.5 rounded border border-outline-variant bg-surface-container-low text-on-surface-variant font-label-sm text-[11px]">To Do</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1 min-w-[90px]">
+<span class="material-symbols-outlined text-[14px]" data-icon="calendar_today">calendar_today</span> Oct 12
+                                </span>
+</div>
+</div>
+<!-- Task Row -->
+<div class="group flex items-center p-md hover:bg-surface-container-lowest transition-colors gap-md">
+<input class="w-5 h-5 rounded border-outline text-primary focus:ring-primary bg-surface transition-colors cursor-pointer" type="checkbox"/>
+<div class="flex-1 min-w-0">
+<p class="font-headline-sm text-body-md text-on-surface truncate group-hover:text-primary transition-colors">Compile Bibliography for Thesis</p>
+</div>
+<div class="hidden sm:flex items-center gap-3">
+<span class="px-2 py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-caps text-[10px] flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-on-tertiary-fixed"></span>Med
+                                </span>
+<span class="px-2 py-0.5 rounded border border-outline-variant bg-surface-container-low text-on-surface-variant font-label-sm text-[11px]">To Do</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1 min-w-[90px]">
+<span class="material-symbols-outlined text-[14px]" data-icon="calendar_today">calendar_today</span> Oct 15
+                                </span>
+</div>
+</div>
+</div>
+</div>
+<!-- Group: In Progress -->
+<div class="bg-surface border border-outline-variant rounded-xl overflow-hidden shadow-sm">
+<div class="bg-surface-container-low px-md py-sm border-b border-outline-variant flex justify-between items-center cursor-pointer hover:bg-surface-container transition-colors">
+<h3 class="font-headline-sm text-headline-sm text-on-surface flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary inline-block animate-pulse"></span>
+                            In Progress <span class="text-on-surface-variant text-sm font-normal ml-2">(1)</span>
+</h3>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="expand_more">expand_more</span>
+</div>
+<div class="divide-y divide-outline-variant/50">
+<!-- Task Row -->
+<div class="group flex items-center p-md hover:bg-surface-container-lowest transition-colors gap-md bg-primary-fixed/20 border-l-2 border-primary">
+<input class="w-5 h-5 rounded border-outline text-primary focus:ring-primary bg-surface transition-colors cursor-pointer" type="checkbox"/>
+<div class="flex-1 min-w-0">
+<p class="font-headline-sm text-body-md text-on-surface truncate group-hover:text-primary transition-colors">Data Analysis: Experiment Set B</p>
+</div>
+<div class="hidden sm:flex items-center gap-3">
+<span class="px-2 py-0.5 rounded-full bg-error-container text-on-error-container font-label-caps text-[10px] flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-on-error-container"></span>High
+                                </span>
+<span class="px-2 py-0.5 rounded border border-primary/30 bg-primary-container/20 text-primary font-label-sm text-[11px]">In Progress</span>
+<span class="font-label-sm text-label-sm text-error flex items-center gap-1 min-w-[90px]">
+<span class="material-symbols-outlined text-[14px]" data-icon="warning">warning</span> Today
+                                </span>
+</div>
+</div>
+</div>
+</div>
+<!-- Group: Done -->
+<div class="bg-surface border border-outline-variant rounded-xl overflow-hidden shadow-sm opacity-70">
+<div class="bg-surface-container-low px-md py-sm border-b border-outline-variant flex justify-between items-center cursor-pointer hover:bg-surface-container transition-colors">
+<h3 class="font-headline-sm text-headline-sm text-on-surface-variant flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-outline-variant inline-block"></span>
+                            Done <span class="text-on-surface-variant text-sm font-normal ml-2">(1)</span>
+</h3>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="expand_more">expand_more</span>
+</div>
+<div class="divide-y divide-outline-variant/50">
+<!-- Task Row -->
+<div class="group flex items-center p-md hover:bg-surface-container-lowest transition-colors gap-md">
+<input checked="" class="w-5 h-5 rounded border-outline text-primary focus:ring-primary bg-surface transition-colors cursor-pointer opacity-50" type="checkbox"/>
+<div class="flex-1 min-w-0">
+<p class="font-headline-sm text-body-md text-on-surface-variant line-through truncate">Initial Literature Review</p>
+</div>
+<div class="hidden sm:flex items-center gap-3 opacity-60">
+<span class="px-2 py-0.5 rounded-full bg-surface-variant text-on-surface-variant font-label-caps text-[10px] flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-outline"></span>Low
+                                </span>
+<span class="px-2 py-0.5 rounded border border-outline-variant bg-surface-container text-on-surface-variant font-label-sm text-[11px]">Done</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1 min-w-[90px]">
+<span class="material-symbols-outlined text-[14px]" data-icon="check">check</span> Oct 1
+                                </span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-2 bg-surface dark:bg-inverse-surface border-t border-outline-variant shadow-lg md:hidden">
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container-high rounded-xl" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-label-sm text-label-sm mt-1">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl p-2 Active: scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="task_alt" data-weight="fill">task_alt</span>
+<span class="font-label-sm text-label-sm mt-1 font-bold">Tasks</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container-high rounded-xl" href="#">
+<span class="material-symbols-outlined" data-icon="folder_open">folder_open</span>
+<span class="font-label-sm text-label-sm mt-1">Files</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container-high rounded-xl" href="#">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+<span class="font-label-sm text-label-sm mt-1">Search</span>
+</a>
+</nav>
+<!-- Slide-over Panel (New Task) -->
+<div class="fixed inset-0 bg-on-surface/20 backdrop-blur-sm z-[60] hidden opacity-0 transition-opacity duration-300" id="slideOverOverlay" onclick="toggleSlideOver()"></div>
+<div class="fixed inset-y-0 right-0 w-full max-w-md bg-surface shadow-[0_0_40px_rgba(0,0,0,0.1)] z-[70] transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col border-l border-outline-variant" id="slideOverPanel">
+<div class="px-lg py-md border-b border-outline-variant flex justify-between items-center bg-surface">
+<h2 class="font-headline-md text-headline-md text-on-surface">New Task</h2>
+<button class="p-2 rounded-full hover:bg-surface-container-high text-on-surface-variant transition-colors" onclick="toggleSlideOver()">
+<span class="material-symbols-outlined" data-icon="close">close</span>
+</button>
+</div>
+<div class="flex-1 overflow-y-auto p-lg space-y-lg slide-over-scroll bg-background">
+<!-- Title -->
+<div class="space-y-1">
+<label class="font-label-sm text-label-sm text-on-surface-variant block">Task Title</label>
+<input class="w-full bg-surface border border-outline-variant rounded-lg px-md py-2 font-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors placeholder:text-outline" placeholder="E.g., Complete Chapter 4 Draft" type="text"/>
+</div>
+<!-- Description -->
+<div class="space-y-1">
+<label class="font-label-sm text-label-sm text-on-surface-variant block">Description</label>
+<textarea class="w-full bg-surface border border-outline-variant rounded-lg px-md py-2 font-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors placeholder:text-outline resize-none" placeholder="Add details..." rows="4"></textarea>
+</div>
+<div class="grid grid-cols-2 gap-md">
+<!-- Status -->
+<div class="space-y-1">
+<label class="font-label-sm text-label-sm text-on-surface-variant block">Status</label>
+<div class="relative">
+<select class="w-full bg-surface border border-outline-variant rounded-lg pl-md pr-8 py-2 font-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary appearance-none cursor-pointer">
+<option>To Do</option>
+<option>In Progress</option>
+<option>Done</option>
+</select>
+<span class="material-symbols-outlined absolute right-2 top-2.5 text-on-surface-variant pointer-events-none" data-icon="arrow_drop_down">arrow_drop_down</span>
+</div>
+</div>
+<!-- Priority -->
+<div class="space-y-1">
+<label class="font-label-sm text-label-sm text-on-surface-variant block">Priority</label>
+<div class="relative">
+<select class="w-full bg-surface border border-outline-variant rounded-lg pl-md pr-8 py-2 font-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary appearance-none cursor-pointer">
+<option>High</option>
+<option>Medium</option>
+<option>Low</option>
+</select>
+<span class="material-symbols-outlined absolute right-2 top-2.5 text-on-surface-variant pointer-events-none" data-icon="arrow_drop_down">arrow_drop_down</span>
+</div>
+</div>
+</div>
+<!-- Due Date -->
+<div class="space-y-1">
+<label class="font-label-sm text-label-sm text-on-surface-variant block">Due Date</label>
+<div class="relative">
+<input class="w-full bg-surface border border-outline-variant rounded-lg pl-10 pr-md py-2 font-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors cursor-pointer" type="date"/>
+<span class="material-symbols-outlined absolute left-3 top-2.5 text-on-surface-variant pointer-events-none text-[18px]" data-icon="calendar_month">calendar_month</span>
+</div>
+</div>
+</div>
+<div class="p-lg border-t border-outline-variant bg-surface flex justify-end gap-md">
+<button class="px-md py-2 rounded-lg font-headline-sm text-label-sm border border-outline-variant text-on-surface hover:bg-surface-container-low transition-colors h-[44px]" onclick="toggleSlideOver()">Cancel</button>
+<button class="px-md py-2 rounded-lg font-headline-sm text-label-sm bg-primary text-on-primary hover:bg-primary-container transition-colors h-[44px]">Create Task</button>
+</div>
+</div>
+<script>
+        function toggleSlideOver() {
+            const panel = document.getElementById('slideOverPanel');
+            const overlay = document.getElementById('slideOverOverlay');
+            
+            if (panel.classList.contains('translate-x-full')) {
+                // Open
+                overlay.classList.remove('hidden');
+                // Small delay to allow display block to apply before opacity transition
+                setTimeout(() => {
+                    overlay.classList.remove('opacity-0');
+                    panel.classList.remove('translate-x-full');
+                }, 10);
+            } else {
+                // Close
+                overlay.classList.add('opacity-0');
+                panel.classList.add('translate-x-full');
+                setTimeout(() => {
+                    overlay.classList.add('hidden');
+                }, 300);
+            }
+        }
+    </script>
+</body></html>
