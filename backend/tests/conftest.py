@@ -12,7 +12,7 @@ from sqlalchemy.pool import NullPool
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from app.db.session import Base
+from app.db.session import Base, get_db
 from app.main import create_app
 
 
@@ -60,7 +60,16 @@ async def db_session(db_engine) -> AsyncGenerator[AsyncSession, None]:
 
 @pytest_asyncio.fixture(scope="function")
 async def client(db_engine) -> AsyncGenerator[AsyncClient, None]:
+    # Create a test-specific session maker
+    async_session = async_sessionmaker(db_engine, class_=AsyncSession, expire_on_commit=False)
+
+    async def override_get_db():
+        async with async_session() as session:
+            yield session
+
     app = create_app()
+    app.dependency_overrides[get_db] = override_get_db
     transport = ASGITransport(app=app)
     async with AsyncClient(transport=transport, base_url="http://test") as ac:
         yield ac
+    app.dependency_overrides.clear()
