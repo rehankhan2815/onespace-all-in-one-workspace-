@@ -8,21 +8,32 @@ class Base(DeclarativeBase):
     pass
 
 
-engine = create_async_engine(
-    settings.database_url,
-    echo=False,
-    pool_pre_ping=True,
-)
+_engine = None
+_async_session_maker = None
 
-async_session_maker = async_sessionmaker(
-    engine,
-    class_=AsyncSession,
-    expire_on_commit=False,
-)
+
+def get_engine():
+    global _engine
+    if _engine is None:
+        url = settings.database_url
+        # For SQLite, use aiosqlite driver
+        if url.startswith("sqlite"):
+            url = url.replace("sqlite://", "sqlite+aiosqlite://")
+        _engine = create_async_engine(url, echo=False, pool_pre_ping=True)
+    return _engine
+
+
+def get_async_session_maker():
+    global _async_session_maker
+    if _async_session_maker is None:
+        _async_session_maker = async_sessionmaker(
+            get_engine(), class_=AsyncSession, expire_on_commit=False
+        )
+    return _async_session_maker
 
 
 async def get_db() -> AsyncSession:
-    async with async_session_maker() as session:
+    async with get_async_session_maker()() as session:
         try:
             yield session
         finally:
@@ -30,9 +41,12 @@ async def get_db() -> AsyncSession:
 
 
 async def init_db() -> None:
-    async with engine.begin() as conn:
+    async with get_engine().begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
 
 
 async def close_db() -> None:
-    await engine.dispose()
+    global _engine
+    if _engine is not None:
+        await _engine.dispose()
+        _engine = None

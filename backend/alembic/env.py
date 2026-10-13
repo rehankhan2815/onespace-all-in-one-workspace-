@@ -12,6 +12,7 @@ sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
 from app.core.config import settings
 from app.db.session import Base
+from app.models import Activity, File, Note, Resource, Task, User, Workspace  # noqa: F401
 
 config = context.config
 
