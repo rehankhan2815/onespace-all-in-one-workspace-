@@ -8,19 +8,6 @@ from app.core.security import create_access_token, decode_token, hash_password, 
 from app.models.user import User
 
 
-@pytest_asyncio.fixture
-async def test_user(db_session):
-    user = User(
-        name="Test User",
-        email="test@example.com",
-        password_hash=hash_password("password123"),
-    )
-    db_session.add(user)
-    await db_session.commit()
-    await db_session.refresh(user)
-    return user
-
-
 class TestPasswordHashing:
     def test_hash_password_returns_hash(self):
         password = "testpass"
@@ -66,7 +53,7 @@ class TestRegister:
     @pytest.mark.asyncio
     async def test_register_success(self, client: AsyncClient):
         response = await client.post(
-            "/api/v1/auth/register",
+            "/api/auth/register",
             json={
                 "name": "New User",
                 "email": "new@example.com",
@@ -84,7 +71,7 @@ class TestRegister:
     @pytest.mark.asyncio
     async def test_register_password_hashed(self, client: AsyncClient, db_session):
         await client.post(
-            "/api/v1/auth/register",
+            "/api/auth/register",
             json={
                 "name": "New User",
                 "email": "hashed@example.com",
@@ -102,7 +89,7 @@ class TestRegister:
     @pytest.mark.asyncio
     async def test_register_duplicate_email(self, client: AsyncClient, test_user: User):
         response = await client.post(
-            "/api/v1/auth/register",
+            "/api/auth/register",
             json={
                 "name": "Another User",
                 "email": test_user.email,
@@ -115,7 +102,7 @@ class TestRegister:
     @pytest.mark.asyncio
     async def test_register_email_normalization(self, client: AsyncClient, db_session):
         await client.post(
-            "/api/v1/auth/register",
+            "/api/auth/register",
             json={
                 "name": "User",
                 "email": "UPPER@EXAMPLE.COM",
@@ -131,7 +118,7 @@ class TestRegister:
     @pytest.mark.asyncio
     async def test_register_invalid_email(self, client: AsyncClient):
         response = await client.post(
-            "/api/v1/auth/register",
+            "/api/auth/register",
             json={
                 "name": "User",
                 "email": "invalid-email",
@@ -143,7 +130,7 @@ class TestRegister:
     @pytest.mark.asyncio
     async def test_register_short_password(self, client: AsyncClient):
         response = await client.post(
-            "/api/v1/auth/register",
+            "/api/auth/register",
             json={
                 "name": "User",
                 "email": "user@example.com",
@@ -155,7 +142,7 @@ class TestRegister:
     @pytest.mark.asyncio
     async def test_register_missing_fields(self, client: AsyncClient):
         response = await client.post(
-            "/api/v1/auth/register",
+            "/api/auth/register",
             json={"name": "User"},
         )
         assert response.status_code == 422
@@ -165,7 +152,7 @@ class TestLogin:
     @pytest.mark.asyncio
     async def test_login_success(self, client: AsyncClient, test_user: User):
         response = await client.post(
-            "/api/v1/auth/login",
+            "/api/auth/login",
             json={
                 "email": test_user.email,
                 "password": "password123",
@@ -185,7 +172,7 @@ class TestLogin:
     @pytest.mark.asyncio
     async def test_login_incorrect_password(self, client: AsyncClient, test_user: User):
         response = await client.post(
-            "/api/v1/auth/login",
+            "/api/auth/login",
             json={
                 "email": test_user.email,
                 "password": "wrongpassword",
@@ -197,7 +184,7 @@ class TestLogin:
     @pytest.mark.asyncio
     async def test_login_unknown_email(self, client: AsyncClient):
         response = await client.post(
-            "/api/v1/auth/login",
+            "/api/auth/login",
             json={
                 "email": "unknown@example.com",
                 "password": "password123",
@@ -209,7 +196,7 @@ class TestLogin:
     @pytest.mark.asyncio
     async def test_login_email_normalization(self, client: AsyncClient, test_user: User):
         response = await client.post(
-            "/api/v1/auth/login",
+            "/api/auth/login",
             json={
                 "email": test_user.email.upper(),
                 "password": "password123",
@@ -223,7 +210,7 @@ class TestCurrentUser:
     async def test_me_with_valid_token(self, client: AsyncClient, test_user: User):
         token = create_access_token(data={"sub": str(test_user.id)})
         response = await client.get(
-            "/api/v1/auth/me",
+            "/api/auth/me",
             headers={"Authorization": f"Bearer {token}"},
         )
         assert response.status_code == 200
@@ -234,14 +221,14 @@ class TestCurrentUser:
 
     @pytest.mark.asyncio
     async def test_me_without_token(self, client: AsyncClient):
-        response = await client.get("/api/v1/auth/me")
+        response = await client.get("/api/auth/me")
         assert response.status_code == 401
         assert "Not authenticated" in response.json()["detail"]
 
     @pytest.mark.asyncio
     async def test_me_with_invalid_token(self, client: AsyncClient):
         response = await client.get(
-            "/api/v1/auth/me",
+            "/api/auth/me",
             headers={"Authorization": "Bearer invalid.token.string"},
         )
         assert response.status_code == 401
@@ -250,7 +237,7 @@ class TestCurrentUser:
     @pytest.mark.asyncio
     async def test_me_with_malformed_token(self, client: AsyncClient):
         response = await client.get(
-            "/api/v1/auth/me",
+            "/api/auth/me",
             headers={"Authorization": "Bearer not.a.valid.jwt"},
         )
         assert response.status_code == 401
@@ -259,7 +246,7 @@ class TestCurrentUser:
     async def test_me_with_expired_token(self, client: AsyncClient, test_user: User):
         token = create_access_token(data={"sub": str(test_user.id)}, expires_delta=timedelta(seconds=-1))
         response = await client.get(
-            "/api/v1/auth/me",
+            "/api/auth/me",
             headers={"Authorization": f"Bearer {token}"},
         )
         assert response.status_code == 401
@@ -270,7 +257,7 @@ class TestCurrentUser:
         import uuid
         token = create_access_token(data={"sub": str(uuid.uuid4())})
         response = await client.get(
-            "/api/v1/auth/me",
+            "/api/auth/me",
             headers={"Authorization": f"Bearer {token}"},
         )
         assert response.status_code == 401
@@ -280,7 +267,7 @@ class TestCurrentUser:
     async def test_me_with_invalid_uuid_in_token(self, client: AsyncClient):
         token = create_access_token(data={"sub": "not-a-uuid"})
         response = await client.get(
-            "/api/v1/auth/me",
+            "/api/auth/me",
             headers={"Authorization": f"Bearer {token}"},
         )
         assert response.status_code == 401

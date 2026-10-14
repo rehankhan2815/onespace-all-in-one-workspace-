@@ -4,6 +4,10 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.auth import router as auth_router
+from app.api.note import router as note_router
+from app.api.resource import router as resource_router
+from app.api.task import router as task_router
+from app.api.workspace import router as workspace_router
 from app.core.config import settings
 from app.db.session import close_db
 
@@ -29,7 +33,11 @@ def create_app() -> FastAPI:
         allow_headers=["*"],
     )
 
-    app.include_router(auth_router, prefix="/api/v1")
+    app.include_router(auth_router, prefix="/api")
+    app.include_router(workspace_router, prefix="/api")
+    app.include_router(task_router, prefix="/api")
+    app.include_router(note_router, prefix="/api")
+    app.include_router(resource_router, prefix="/api")
 
     @app.get("/health", tags=["health"])
     async def health_check():
