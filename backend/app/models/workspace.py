@@ -10,6 +10,7 @@ from app.db.session import Base
 if TYPE_CHECKING:
     from app.models.activity import Activity
     from app.models.file import File
+    from app.models.folder import Folder
     from app.models.note import Note
     from app.models.resource import Resource
     from app.models.task import Task
@@ -48,6 +49,9 @@ class Workspace(Base):
     )
     files: Mapped[list["File"]] = relationship(
         "File", back_populates="workspace", cascade="all, delete-orphan", lazy="selectin"
+    )
+    folders: Mapped[list["Folder"]] = relationship(
+        "Folder", back_populates="workspace", cascade="all, delete-orphan", lazy="selectin"
     )
     activities: Mapped[list["Activity"]] = relationship(
         "Activity", back_populates="workspace", cascade="all, delete-orphan", lazy="selectin"

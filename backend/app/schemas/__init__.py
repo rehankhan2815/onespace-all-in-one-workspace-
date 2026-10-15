@@ -5,6 +5,13 @@ from app.schemas.auth import (
     UserResponse,
 )
 from app.schemas.common import MessageResponse
+from app.schemas.file import FileListResponse, FileResponse, FileUploadResponse
+from app.schemas.folder import (
+    FolderCreate,
+    FolderListResponse,
+    FolderResponse,
+    FolderUpdate,
+)
 from app.schemas.resource import (
     ResourceCreate,
     ResourceListResponse,
@@ -46,4 +53,11 @@ __all__ = [
     "ResourceUpdate",
     "ResourceResponse",
     "ResourceListResponse",
+    "FolderCreate",
+    "FolderUpdate",
+    "FolderResponse",
+    "FolderListResponse",
+    "FileResponse",
+    "FileListResponse",
+    "FileUploadResponse",
 ]

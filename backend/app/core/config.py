@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from pydantic import Field
 from pydantic_settings import BaseSettings
 
@@ -18,6 +20,14 @@ class Settings(BaseSettings):
     cors_origins: list[str] = Field(
         default=["http://localhost:3000", "http://127.0.0.1:3000"],
         description="Allowed CORS origins",
+    )
+    upload_dir: Path = Field(
+        default=Path.cwd() / "uploads",
+        description="Directory for uploaded files (outside source code)",
+    )
+    max_upload_size: int = Field(
+        default=50 * 1024 * 1024,  # 50 MB
+        description="Maximum upload size in bytes",
     )
 
     class Config:

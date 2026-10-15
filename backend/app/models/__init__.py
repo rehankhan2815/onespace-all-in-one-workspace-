@@ -1,5 +1,6 @@
 from app.models.activity import Activity
 from app.models.file import File
+from app.models.folder import Folder
 from app.models.note import Note
 from app.models.resource import Resource
 from app.models.task import Task
@@ -13,5 +14,6 @@ __all__ = [
     "Note",
     "Resource",
     "File",
+    "Folder",
     "Activity",
 ]
