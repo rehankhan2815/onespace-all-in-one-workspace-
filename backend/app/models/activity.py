@@ -27,6 +27,9 @@ class ActivityType(str):
     RESOURCE_DELETED = "resource_deleted"
     FILE_UPLOADED = "file_uploaded"
     FILE_DELETED = "file_deleted"
+    FOLDER_CREATED = "folder_created"
+    FOLDER_UPDATED = "folder_updated"
+    FOLDER_DELETED = "folder_deleted"
 
 
 class Activity(Base):

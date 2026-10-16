@@ -11,6 +11,12 @@ from app.models.task import Task
 from app.models.user import User
 from app.models.workspace import Workspace
 from app.schemas.task import TaskCreate, TaskListResponse, TaskResponse, TaskUpdate
+from app.utils.activity import (
+    log_task_completed,
+    log_task_created,
+    log_task_deleted,
+    log_task_updated,
+)
 
 router = APIRouter(prefix="/workspaces/{workspace_id}/tasks", tags=["tasks"])
 
@@ -76,6 +82,8 @@ async def create_task(
         due_date=task_in.due_date,
     )
     db.add(task)
+    await db.flush()
+    await log_task_created(db, workspace_id, task.title)
     await db.commit()
     await db.refresh(task)
     return TaskResponse.model_validate(task)
@@ -139,8 +147,18 @@ async def update_task(
     task = await _get_task_or_404(workspace_id, task_id, current_user, db)
 
     update_data = task_in.model_dump(exclude_unset=True)
+
+    # Check if status is changing to "Done" (task completion)
+    was_done = task.status == "Done"
+    will_be_done = update_data.get("status") == "Done"
+
     for field, value in update_data.items():
         setattr(task, field, value)
+
+    if will_be_done and not was_done:
+        await log_task_completed(db, workspace_id, task.title)
+    else:
+        await log_task_updated(db, workspace_id, task.title)
 
     await db.commit()
     await db.refresh(task)
@@ -156,6 +174,8 @@ async def delete_task(
 ):
     task = await _get_task_or_404(workspace_id, task_id, current_user, db)
 
+    task_title = task.title
     await db.delete(task)
+    await log_task_deleted(db, workspace_id, task_title)
     await db.commit()
     return None

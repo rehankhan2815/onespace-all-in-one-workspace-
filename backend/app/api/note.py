@@ -11,6 +11,11 @@ from app.models.note import Note
 from app.models.user import User
 from app.models.workspace import Workspace
 from app.schemas.note import NoteCreate, NoteListResponse, NoteResponse, NoteUpdate
+from app.utils.activity import (
+    log_note_created,
+    log_note_deleted,
+    log_note_updated,
+)
 
 router = APIRouter(prefix="/workspaces/{workspace_id}/notes", tags=["notes"])
 
@@ -73,6 +78,8 @@ async def create_note(
         body=note_in.body,
     )
     db.add(note)
+    await db.flush()
+    await log_note_created(db, workspace_id, note.title)
     await db.commit()
     await db.refresh(note)
     return NoteResponse.model_validate(note)
@@ -130,6 +137,7 @@ async def update_note(
     for field, value in update_data.items():
         setattr(note, field, value)
 
+    await log_note_updated(db, workspace_id, note.title)
     await db.commit()
     await db.refresh(note)
     return NoteResponse.model_validate(note)
@@ -144,6 +152,8 @@ async def delete_note(
 ):
     note = await _get_note_or_404(workspace_id, note_id, current_user, db)
 
+    note_title = note.title
     await db.delete(note)
+    await log_note_deleted(db, workspace_id, note_title)
     await db.commit()
     return None

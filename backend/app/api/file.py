@@ -13,6 +13,7 @@ from app.models.folder import Folder
 from app.models.user import User
 from app.models.workspace import Workspace
 from app.schemas.file import FileListResponse, FileResponse, FileUploadResponse
+from app.utils.activity import log_file_deleted, log_file_uploaded
 from app.utils.file_storage import (
     delete_storage_file,
     generate_storage_name,
@@ -129,6 +130,8 @@ async def upload_file(
         storage_path=storage_name,
     )
     db.add(file_record)
+    await db.flush()
+    await log_file_uploaded(db, workspace_id, file_record.filename)
     await db.commit()
     await db.refresh(file_record)
 
@@ -214,10 +217,12 @@ async def delete_file(
 ):
     file = await _get_file_or_404(workspace_id, file_id, current_user, db)
 
+    file_filename = file.filename
     # Delete physical file from storage
     delete_storage_file(file.storage_path)
 
     # Delete database record
     await db.delete(file)
+    await log_file_deleted(db, workspace_id, file_filename)
     await db.commit()
     return None

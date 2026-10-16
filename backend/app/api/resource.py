@@ -1,8 +1,7 @@
 from uuid import UUID
-from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
-from sqlalchemy import select, func
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import get_current_user
@@ -10,7 +9,17 @@ from app.db.session import get_db
 from app.models.resource import Resource
 from app.models.user import User
 from app.models.workspace import Workspace
-from app.schemas.resource import ResourceCreate, ResourceListResponse, ResourceResponse, ResourceUpdate
+from app.schemas.resource import (
+    ResourceCreate,
+    ResourceListResponse,
+    ResourceResponse,
+    ResourceUpdate,
+)
+from app.utils.activity import (
+    log_resource_added,
+    log_resource_deleted,
+    log_resource_updated,
+)
 
 router = APIRouter(prefix="/workspaces/{workspace_id}/resources", tags=["resources"])
 
@@ -74,6 +83,8 @@ async def create_resource(
         description=resource_in.description,
     )
     db.add(resource)
+    await db.flush()
+    await log_resource_added(db, workspace_id, resource.title)
     await db.commit()
     await db.refresh(resource)
     return ResourceResponse.model_validate(resource)
@@ -135,6 +146,7 @@ async def update_resource(
     for field, value in update_data.items():
         setattr(resource, field, value)
 
+    await log_resource_updated(db, workspace_id, resource.title)
     await db.commit()
     await db.refresh(resource)
     return ResourceResponse.model_validate(resource)
@@ -149,6 +161,8 @@ async def delete_resource(
 ):
     resource = await _get_resource_or_404(workspace_id, resource_id, current_user, db)
 
+    resource_title = resource.title
     await db.delete(resource)
+    await log_resource_deleted(db, workspace_id, resource_title)
     await db.commit()
     return None

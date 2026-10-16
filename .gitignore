@@ -1,0 +1,6 @@
+.backup-backend-*/
+uploads/
+backend/uploads/
+__pycache__/
+*.pyc
+.pytest_cache/

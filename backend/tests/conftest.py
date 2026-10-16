@@ -19,6 +19,16 @@ from app.models.user import User
 from app.models.workspace import Workspace
 
 
+@pytest.fixture(autouse=True)
+def _isolate_test_upload_dir(tmp_path):
+    from app.core.config import settings
+
+    original = settings.upload_dir
+    settings.upload_dir = tmp_path / "uploads"
+    yield
+    settings.upload_dir = original
+
+
 @pytest.fixture(scope="session")
 def event_loop():
     import asyncio

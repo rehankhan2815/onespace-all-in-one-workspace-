@@ -14,6 +14,11 @@ from app.schemas.workspace import (
     WorkspaceResponse,
     WorkspaceUpdate,
 )
+from app.utils.activity import (
+    log_workspace_archived,
+    log_workspace_created,
+    log_workspace_updated,
+)
 
 router = APIRouter(prefix="/workspaces", tags=["workspaces"])
 
@@ -30,6 +35,8 @@ async def create_workspace(
         description=workspace_in.description,
     )
     db.add(workspace)
+    await db.flush()
+    await log_workspace_created(db, workspace.id, workspace.name)
     await db.commit()
     await db.refresh(workspace)
     return WorkspaceResponse.model_validate(workspace)
@@ -111,6 +118,7 @@ async def update_workspace(
     for field, value in update_data.items():
         setattr(workspace, field, value)
 
+    await log_workspace_updated(db, workspace.id, workspace.name)
     await db.commit()
     await db.refresh(workspace)
     return WorkspaceResponse.model_validate(workspace)
@@ -137,6 +145,7 @@ async def archive_workspace(
         )
 
     workspace.archived = True
+    await log_workspace_archived(db, workspace.id, workspace.name)
     await db.commit()
     await db.refresh(workspace)
     return WorkspaceResponse.model_validate(workspace)
@@ -163,6 +172,7 @@ async def unarchive_workspace(
         )
 
     workspace.archived = False
+    await log_workspace_updated(db, workspace.id, workspace.name)
     await db.commit()
     await db.refresh(workspace)
     return WorkspaceResponse.model_validate(workspace)

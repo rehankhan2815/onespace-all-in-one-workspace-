@@ -1,3 +1,4 @@
+from app.schemas.activity import ActivityResponse
 from app.schemas.auth import (
     LoginRequest,
     RegisterRequest,
@@ -5,6 +6,7 @@ from app.schemas.auth import (
     UserResponse,
 )
 from app.schemas.common import MessageResponse
+from app.schemas.dashboard import DashboardSummaryResponse
 from app.schemas.file import FileListResponse, FileResponse, FileUploadResponse
 from app.schemas.folder import (
     FolderCreate,
@@ -18,6 +20,7 @@ from app.schemas.resource import (
     ResourceResponse,
     ResourceUpdate,
 )
+from app.schemas.search import SearchResponse
 from app.schemas.task import (
     TaskCreate,
     TaskListResponse,
@@ -60,4 +63,7 @@ __all__ = [
     "FileResponse",
     "FileListResponse",
     "FileUploadResponse",
+    "ActivityResponse",
+    "DashboardSummaryResponse",
+    "SearchResponse",
 ]

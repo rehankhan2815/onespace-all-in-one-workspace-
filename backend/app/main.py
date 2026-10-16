@@ -3,11 +3,13 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.api.activity import router as activity_router
 from app.api.auth import router as auth_router
 from app.api.file import router as file_router
 from app.api.folder import router as folder_router
 from app.api.note import router as note_router
 from app.api.resource import router as resource_router
+from app.api.search import router as search_router
 from app.api.task import router as task_router
 from app.api.workspace import router as workspace_router
 from app.core.config import settings
@@ -42,6 +44,8 @@ def create_app() -> FastAPI:
     app.include_router(resource_router, prefix="/api")
     app.include_router(folder_router, prefix="/api")
     app.include_router(file_router, prefix="/api")
+    app.include_router(activity_router, prefix="/api")
+    app.include_router(search_router, prefix="/api")
 
     @app.get("/health", tags=["health"])
     async def health_check():

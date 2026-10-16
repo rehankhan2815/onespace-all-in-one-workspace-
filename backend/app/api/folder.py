@@ -10,6 +10,11 @@ from app.models.folder import Folder
 from app.models.user import User
 from app.models.workspace import Workspace
 from app.schemas.folder import FolderCreate, FolderListResponse, FolderResponse, FolderUpdate
+from app.utils.activity import (
+    log_folder_created,
+    log_folder_deleted,
+    log_folder_updated,
+)
 
 router = APIRouter(prefix="/workspaces/{workspace_id}/folders", tags=["folders"])
 
@@ -112,6 +117,8 @@ async def create_folder(
         description=folder_in.description,
     )
     db.add(folder)
+    await db.flush()
+    await log_folder_created(db, workspace_id, folder.name)
     await db.commit()
     await db.refresh(folder)
     return FolderResponse.model_validate(folder)
@@ -246,6 +253,7 @@ async def update_folder(
     for field, value in update_data.items():
         setattr(folder, field, value)
 
+    await log_folder_updated(db, workspace_id, folder.name)
     await db.commit()
     await db.refresh(folder)
     return FolderResponse.model_validate(folder)
@@ -260,7 +268,9 @@ async def delete_folder(
 ):
     folder = await _get_folder_or_404(workspace_id, folder_id, current_user, db)
 
+    folder_name = folder.name
     # Cascade delete will handle children folders and files via ORM
     await db.delete(folder)
+    await log_folder_deleted(db, workspace_id, folder_name)
     await db.commit()
     return None
