@@ -1,8 +1,6 @@
 import pytest
-import pytest_asyncio
 from httpx import AsyncClient
 
-from app.core.security import create_access_token
 from app.models.workspace import Workspace
 
 
@@ -68,41 +66,28 @@ class TestWorkspaceList:
         response = await client.get("/api/workspaces", headers=auth_headers)
         assert response.status_code == 200
         data = response.json()
-        assert data["items"] == []
-        assert data["total"] == 0
-        assert data["page"] == 1
-        assert data["page_size"] == 20
+        assert data == []
 
     @pytest.mark.asyncio
     async def test_list_workspaces_with_data(self, client: AsyncClient, auth_headers, test_workspace):
         response = await client.get("/api/workspaces", headers=auth_headers)
         assert response.status_code == 200
         data = response.json()
-        assert len(data["items"]) == 1
-        assert data["total"] == 1
-        assert data["items"][0]["name"] == test_workspace.name
+        assert len(data) == 1
+        assert data[0]["name"] == test_workspace.name
 
     @pytest.mark.asyncio
-    async def test_list_workspaces_pagination(self, client: AsyncClient, auth_headers, test_user, db_session):
-        # Create multiple workspaces
+    async def test_list_workspaces_returns_all(self, client: AsyncClient, auth_headers, test_user, db_session):
         for i in range(5):
             ws = Workspace(owner_id=test_user.id, name=f"Workspace {i}")
             db_session.add(ws)
         await db_session.commit()
 
-        response = await client.get("/api/workspaces?page=1&page_size=2", headers=auth_headers)
+        response = await client.get("/api/workspaces", headers=auth_headers)
         assert response.status_code == 200
         data = response.json()
-        assert len(data["items"]) == 2
-        assert data["page"] == 1
-        assert data["page_size"] == 2
-        assert data["total"] == 5
-
-        response = await client.get("/api/workspaces?page=2&page_size=2", headers=auth_headers)
-        assert response.status_code == 200
-        data = response.json()
-        assert len(data["items"]) == 2
-        assert data["page"] == 2
+        assert isinstance(data, list)
+        assert len(data) == 5
 
     @pytest.mark.asyncio
     async def test_list_workspaces_archived_filter(self, client: AsyncClient, auth_headers, test_user, db_session):
@@ -114,14 +99,14 @@ class TestWorkspaceList:
         response = await client.get("/api/workspaces?archived=false", headers=auth_headers)
         assert response.status_code == 200
         data = response.json()
-        assert len(data["items"]) == 1
-        assert data["items"][0]["name"] == "Active"
+        assert len(data) == 1
+        assert data[0]["name"] == "Active"
 
         response = await client.get("/api/workspaces?archived=true", headers=auth_headers)
         assert response.status_code == 200
         data = response.json()
-        assert len(data["items"]) == 1
-        assert data["items"][0]["name"] == "Archived"
+        assert len(data) == 1
+        assert data[0]["name"] == "Archived"
 
     @pytest.mark.asyncio
     async def test_list_workspaces_cross_user_isolation(
@@ -131,7 +116,7 @@ class TestWorkspaceList:
         assert response.status_code == 200
         data = response.json()
         # Should not see another user's workspace
-        assert data["total"] == 0
+        assert len(data) == 0
 
 
 class TestWorkspaceGet:

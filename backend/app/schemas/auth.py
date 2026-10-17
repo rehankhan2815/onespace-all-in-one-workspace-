@@ -11,14 +11,15 @@ class RegisterRequest(BaseModel):
 
 
 class LoginRequest(BaseModel):
-    email: EmailStr
+    identifier: str = Field(..., min_length=1, max_length=255)
     password: str = Field(..., min_length=1)
 
 
 class TokenResponse(BaseModel):
-    access_token: str
+    token: str
     token_type: str = "bearer"
     expires_in: int  # seconds
+    user: "UserResponse"
 
 
 class UserResponse(BaseModel):

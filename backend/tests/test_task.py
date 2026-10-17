@@ -1,11 +1,10 @@
+from datetime import date, timedelta
+
 import pytest
 import pytest_asyncio
-from datetime import date, timedelta
 from httpx import AsyncClient
 
-from app.core.security import create_access_token
 from app.models.task import Task
-from app.models.workspace import Workspace
 
 
 @pytest_asyncio.fixture
@@ -142,8 +141,7 @@ class TestTaskList:
         )
         assert response.status_code == 200
         data = response.json()
-        assert data["items"] == []
-        assert data["total"] == 0
+        assert data == []
 
     @pytest.mark.asyncio
     async def test_list_tasks_with_data(self, client: AsyncClient, auth_headers, test_task):
@@ -153,9 +151,8 @@ class TestTaskList:
         )
         assert response.status_code == 200
         data = response.json()
-        assert len(data["items"]) == 1
-        assert data["total"] == 1
-        assert data["items"][0]["title"] == test_task.title
+        assert len(data) == 1
+        assert data[0]["title"] == test_task.title
 
     @pytest.mark.asyncio
     async def test_list_tasks_filter_by_status(self, client: AsyncClient, auth_headers, test_workspace, db_session):
@@ -171,8 +168,8 @@ class TestTaskList:
         )
         assert response.status_code == 200
         data = response.json()
-        assert data["total"] == 1
-        assert data["items"][0]["status"] == "To Do"
+        assert len(data) == 1
+        assert data[0]["status"] == "To Do"
 
     @pytest.mark.asyncio
     async def test_list_tasks_filter_by_priority(self, client: AsyncClient, auth_headers, test_workspace, db_session):
@@ -187,25 +184,23 @@ class TestTaskList:
         )
         assert response.status_code == 200
         data = response.json()
-        assert data["total"] == 1
-        assert data["items"][0]["priority"] == "High"
+        assert len(data) == 1
+        assert data[0]["priority"] == "High"
 
     @pytest.mark.asyncio
-    async def test_list_tasks_pagination(self, client: AsyncClient, auth_headers, test_workspace, db_session):
+    async def test_list_tasks_returns_all(self, client: AsyncClient, auth_headers, test_workspace, db_session):
         for i in range(5):
             db_session.add(Task(workspace_id=test_workspace.id, title=f"Task {i}"))
         await db_session.commit()
 
         response = await client.get(
-            f"/api/workspaces/{test_workspace.id}/tasks?page=1&page_size=2",
+            f"/api/workspaces/{test_workspace.id}/tasks",
             headers=auth_headers,
         )
         assert response.status_code == 200
         data = response.json()
-        assert len(data["items"]) == 2
-        assert data["page"] == 1
-        assert data["page_size"] == 2
-        assert data["total"] == 5
+        assert isinstance(data, list)
+        assert len(data) == 5
 
     @pytest.mark.asyncio
     async def test_list_tasks_ordering(self, client: AsyncClient, auth_headers, test_workspace, db_session):
@@ -222,8 +217,8 @@ class TestTaskList:
         assert response.status_code == 200
         data = response.json()
         # Should be ordered by updated_at desc (newest first)
-        assert len(data["items"]) == 3
-        assert data["items"][0]["title"] == "Task 2"  # newest
+        assert len(data) == 3
+        assert data[0]["title"] == "Task 2"  # newest
 
 
 class TestTaskGet:
@@ -318,10 +313,8 @@ class TestTaskUpdate:
     @pytest.mark.asyncio
     async def test_update_task_clear_due_date(self, client: AsyncClient, auth_headers, test_task):
         test_task.due_date = date.today() + timedelta(days=7)
-        from sqlalchemy import select
         # We need to refresh the task in the session
         # Actually the fixture already commits, so just update directly
-        from app.db.session import get_db
         # Skip - the task fixture doesn't have due_date set
 
         # Test clearing by setting to null

@@ -1,7 +1,6 @@
 from datetime import timedelta
 
 import pytest
-import pytest_asyncio
 from httpx import AsyncClient
 
 from app.core.security import create_access_token, decode_token, hash_password, verify_password
@@ -154,18 +153,21 @@ class TestLogin:
         response = await client.post(
             "/api/auth/login",
             json={
-                "email": test_user.email,
+                "identifier": test_user.email,
                 "password": "password123",
             },
         )
         assert response.status_code == 200
         data = response.json()
-        assert "access_token" in data
+        assert data["token"]
         assert data["token_type"] == "bearer"
         assert data["expires_in"] == 30 * 60
+        assert data["user"]["id"] == str(test_user.id)
+        assert data["user"]["name"] == test_user.name
+        assert data["user"]["email"] == test_user.email
 
         # Verify token is valid
-        payload = decode_token(data["access_token"])
+        payload = decode_token(data["token"])
         assert payload is not None
         assert payload["sub"] == str(test_user.id)
 
@@ -174,7 +176,7 @@ class TestLogin:
         response = await client.post(
             "/api/auth/login",
             json={
-                "email": test_user.email,
+                "identifier": test_user.email,
                 "password": "wrongpassword",
             },
         )
@@ -186,7 +188,7 @@ class TestLogin:
         response = await client.post(
             "/api/auth/login",
             json={
-                "email": "unknown@example.com",
+                "identifier": "unknown@example.com",
                 "password": "password123",
             },
         )
@@ -198,11 +200,49 @@ class TestLogin:
         response = await client.post(
             "/api/auth/login",
             json={
-                "email": test_user.email.upper(),
+                "identifier": test_user.email.upper(),
                 "password": "password123",
             },
         )
         assert response.status_code == 200
+        assert response.json()["user"]["id"] == str(test_user.id)
+
+    @pytest.mark.asyncio
+    async def test_login_username_login(self, client: AsyncClient, test_user: User):
+        response = await client.post(
+            "/api/auth/login",
+            json={
+                "identifier": test_user.name,
+                "password": "password123",
+            },
+        )
+        assert response.status_code == 200
+        data = response.json()
+        assert data["token"]
+        assert data["user"]["id"] == str(test_user.id)
+
+    @pytest.mark.asyncio
+    async def test_login_case_insensitive_username(self, client: AsyncClient, test_user: User):
+        response = await client.post(
+            "/api/auth/login",
+            json={
+                "identifier": test_user.name.upper(),
+                "password": "password123",
+            },
+        )
+        assert response.status_code == 200
+        assert response.json()["user"]["id"] == str(test_user.id)
+
+    @pytest.mark.asyncio
+    async def test_login_empty_identifier(self, client: AsyncClient, test_user: User):
+        response = await client.post(
+            "/api/auth/login",
+            json={
+                "identifier": "",
+                "password": "password123",
+            },
+        )
+        assert response.status_code == 422
 
 
 class TestCurrentUser:

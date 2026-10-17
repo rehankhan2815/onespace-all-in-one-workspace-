@@ -1,7 +1,7 @@
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
-from sqlalchemy import select, func
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import get_current_user
@@ -10,7 +10,6 @@ from app.models.user import User
 from app.models.workspace import Workspace
 from app.schemas.workspace import (
     WorkspaceCreate,
-    WorkspaceListResponse,
     WorkspaceResponse,
     WorkspaceUpdate,
 )
@@ -42,10 +41,8 @@ async def create_workspace(
     return WorkspaceResponse.model_validate(workspace)
 
 
-@router.get("", response_model=WorkspaceListResponse)
+@router.get("", response_model=list[WorkspaceResponse])
 async def list_workspaces(
-    page: int = Query(1, ge=1),
-    page_size: int = Query(20, ge=1, le=100),
     archived: bool = Query(False),
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
@@ -54,20 +51,10 @@ async def list_workspaces(
         Workspace.owner_id == current_user.id,
         Workspace.archived == archived,
     ).order_by(Workspace.updated_at.desc())
-
-    total_stmt = select(func.count()).select_from(stmt.subquery())
-    total = await db.scalar(total_stmt)
-
-    stmt = stmt.offset((page - 1) * page_size).limit(page_size)
     result = await db.execute(stmt)
     workspaces = result.scalars().all()
 
-    return WorkspaceListResponse(
-        items=[WorkspaceResponse.model_validate(w) for w in workspaces],
-        total=total,
-        page=page,
-        page_size=page_size,
-    )
+    return [WorkspaceResponse.model_validate(w) for w in workspaces]
 
 
 @router.get("/{workspace_id}", response_model=WorkspaceResponse)

@@ -1,8 +1,7 @@
 from uuid import UUID
-from typing import Optional
 
-from fastapi import APIRouter, Depends, HTTPException, Query, status
-from sqlalchemy import select, func
+from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import get_current_user
@@ -10,7 +9,7 @@ from app.db.session import get_db
 from app.models.note import Note
 from app.models.user import User
 from app.models.workspace import Workspace
-from app.schemas.note import NoteCreate, NoteListResponse, NoteResponse, NoteUpdate
+from app.schemas.note import NoteCreate, NoteResponse, NoteUpdate
 from app.utils.activity import (
     log_note_created,
     log_note_deleted,
@@ -85,31 +84,19 @@ async def create_note(
     return NoteResponse.model_validate(note)
 
 
-@router.get("", response_model=NoteListResponse)
+@router.get("", response_model=list[NoteResponse])
 async def list_notes(
     workspace_id: UUID,
-    page: int = Query(1, ge=1),
-    page_size: int = Query(20, ge=1, le=100),
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
     await _get_workspace_or_404(workspace_id, current_user, db)
 
     stmt = select(Note).where(Note.workspace_id == workspace_id).order_by(Note.updated_at.desc())
-
-    total_stmt = select(func.count()).select_from(stmt.subquery())
-    total = await db.scalar(total_stmt)
-
-    stmt = stmt.offset((page - 1) * page_size).limit(page_size)
     result = await db.execute(stmt)
     notes = result.scalars().all()
 
-    return NoteListResponse(
-        items=[NoteResponse.model_validate(n) for n in notes],
-        total=total,
-        page=page,
-        page_size=page_size,
-    )
+    return [NoteResponse.model_validate(n) for n in notes]
 
 
 @router.get("/{note_id}", response_model=NoteResponse)

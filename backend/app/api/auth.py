@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy import select
+from sqlalchemy import or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import get_current_user
@@ -37,9 +37,16 @@ async def register(request: RegisterRequest, db: AsyncSession = Depends(get_db))
 
 @router.post("/login", response_model=TokenResponse)
 async def login(request: LoginRequest, db: AsyncSession = Depends(get_db)):
-    normalized_email = request.email.lower()
+    identifier = request.identifier.strip()
 
-    result = await db.execute(select(User).where(User.email == normalized_email))
+    result = await db.execute(
+        select(User).where(
+            or_(
+                User.email.ilike(identifier),
+                User.name.ilike(identifier),
+            )
+        )
+    )
     user = result.scalar_one_or_none()
 
     if not user or not verify_password(request.password, user.password_hash):
@@ -53,9 +60,10 @@ async def login(request: LoginRequest, db: AsyncSession = Depends(get_db)):
     expires_in = 30 * 60  # 30 minutes in seconds
 
     return TokenResponse(
-        access_token=access_token,
+        token=access_token,
         token_type="bearer",
         expires_in=expires_in,
+        user=user,
     )
 
 

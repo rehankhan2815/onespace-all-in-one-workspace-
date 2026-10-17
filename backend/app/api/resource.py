@@ -1,7 +1,7 @@
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException, Query, status
-from sqlalchemy import func, select
+from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import get_current_user
@@ -9,12 +9,7 @@ from app.db.session import get_db
 from app.models.resource import Resource
 from app.models.user import User
 from app.models.workspace import Workspace
-from app.schemas.resource import (
-    ResourceCreate,
-    ResourceListResponse,
-    ResourceResponse,
-    ResourceUpdate,
-)
+from app.schemas.resource import ResourceCreate, ResourceResponse, ResourceUpdate
 from app.utils.activity import (
     log_resource_added,
     log_resource_deleted,
@@ -90,11 +85,9 @@ async def create_resource(
     return ResourceResponse.model_validate(resource)
 
 
-@router.get("", response_model=ResourceListResponse)
+@router.get("", response_model=list[ResourceResponse])
 async def list_resources(
     workspace_id: UUID,
-    page: int = Query(1, ge=1),
-    page_size: int = Query(20, ge=1, le=100),
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
@@ -103,20 +96,10 @@ async def list_resources(
     stmt = (
         select(Resource).where(Resource.workspace_id == workspace_id).order_by(Resource.updated_at.desc())
     )
-
-    total_stmt = select(func.count()).select_from(stmt.subquery())
-    total = await db.scalar(total_stmt)
-
-    stmt = stmt.offset((page - 1) * page_size).limit(page_size)
     result = await db.execute(stmt)
     resources = result.scalars().all()
 
-    return ResourceListResponse(
-        items=[ResourceResponse.model_validate(r) for r in resources],
-        total=total,
-        page=page,
-        page_size=page_size,
-    )
+    return [ResourceResponse.model_validate(r) for r in resources]
 
 
 @router.get("/{resource_id}", response_model=ResourceResponse)

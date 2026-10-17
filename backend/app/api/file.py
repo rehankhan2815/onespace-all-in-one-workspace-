@@ -3,7 +3,7 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException, Query, UploadFile, status
 from fastapi import File as FastAPIFile
 from fastapi.responses import FileResponse as FastAPIFileResponse
-from sqlalchemy import func, select
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import get_current_user
@@ -12,7 +12,7 @@ from app.models.file import File
 from app.models.folder import Folder
 from app.models.user import User
 from app.models.workspace import Workspace
-from app.schemas.file import FileListResponse, FileResponse, FileUploadResponse
+from app.schemas.file import FileResponse, FileUploadResponse
 from app.utils.activity import log_file_deleted, log_file_uploaded
 from app.utils.file_storage import (
     delete_storage_file,
@@ -138,12 +138,10 @@ async def upload_file(
     return FileUploadResponse.model_validate(file_record)
 
 
-@router.get("", response_model=FileListResponse)
+@router.get("", response_model=list[FileResponse])
 async def list_files(
     workspace_id: UUID,
     folder_id: UUID | None = Query(None, description="Filter by folder (None for root files)"),
-    page: int = Query(1, ge=1),
-    page_size: int = Query(20, ge=1, le=100),
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
@@ -157,20 +155,10 @@ async def list_files(
         File.workspace_id == workspace_id,
         File.folder_id == folder_id,
     ).order_by(File.upload_date.desc())
-
-    total_stmt = select(func.count()).select_from(stmt.subquery())
-    total = await db.scalar(total_stmt)
-
-    stmt = stmt.offset((page - 1) * page_size).limit(page_size)
     result = await db.execute(stmt)
     files = result.scalars().all()
 
-    return FileListResponse(
-        items=[FileResponse.model_validate(f) for f in files],
-        total=total,
-        page=page,
-        page_size=page_size,
-    )
+    return [FileResponse.model_validate(f) for f in files]
 
 
 @router.get("/{file_id}", response_model=FileResponse)

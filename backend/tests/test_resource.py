@@ -2,9 +2,7 @@ import pytest
 import pytest_asyncio
 from httpx import AsyncClient
 
-from app.core.security import create_access_token
 from app.models.resource import Resource
-from app.models.workspace import Workspace
 
 
 @pytest_asyncio.fixture
@@ -137,8 +135,7 @@ class TestResourceList:
         )
         assert response.status_code == 200
         data = response.json()
-        assert data["items"] == []
-        assert data["total"] == 0
+        assert data == []
 
     @pytest.mark.asyncio
     async def test_list_resources_with_data(self, client: AsyncClient, auth_headers, test_resource):
@@ -148,12 +145,11 @@ class TestResourceList:
         )
         assert response.status_code == 200
         data = response.json()
-        assert len(data["items"]) == 1
-        assert data["total"] == 1
-        assert data["items"][0]["title"] == test_resource.title
+        assert len(data) == 1
+        assert data[0]["title"] == test_resource.title
 
     @pytest.mark.asyncio
-    async def test_list_resources_pagination(self, client: AsyncClient, auth_headers, test_workspace, db_session):
+    async def test_list_resources_returns_all(self, client: AsyncClient, auth_headers, test_workspace, db_session):
         for i in range(5):
             db_session.add(Resource(
                 workspace_id=test_workspace.id,
@@ -163,15 +159,13 @@ class TestResourceList:
         await db_session.commit()
 
         response = await client.get(
-            f"/api/workspaces/{test_workspace.id}/resources?page=1&page_size=2",
+            f"/api/workspaces/{test_workspace.id}/resources",
             headers=auth_headers,
         )
         assert response.status_code == 200
         data = response.json()
-        assert len(data["items"]) == 2
-        assert data["page"] == 1
-        assert data["page_size"] == 2
-        assert data["total"] == 5
+        assert isinstance(data, list)
+        assert len(data) == 5
 
     @pytest.mark.asyncio
     async def test_list_resources_ordering(self, client: AsyncClient, auth_headers, test_workspace, db_session):
@@ -191,8 +185,8 @@ class TestResourceList:
         )
         assert response.status_code == 200
         data = response.json()
-        assert len(data["items"]) == 3
-        assert data["items"][0]["title"] == "Resource 2"
+        assert len(data) == 3
+        assert data[0]["title"] == "Resource 2"
 
 
 class TestResourceGet:

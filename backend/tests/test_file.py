@@ -194,8 +194,7 @@ class TestFileList:
         )
         assert response.status_code == 200
         data = response.json()
-        assert data["items"] == []
-        assert data["total"] == 0
+        assert data == []
 
     @pytest.mark.asyncio
     async def test_list_files_with_data(self, client: AsyncClient, auth_headers, test_file: File):
@@ -205,9 +204,8 @@ class TestFileList:
         )
         assert response.status_code == 200
         data = response.json()
-        assert len(data["items"]) == 1
-        assert data["total"] == 1
-        assert data["items"][0]["filename"] == test_file.filename
+        assert len(data) == 1
+        assert data[0]["filename"] == test_file.filename
 
     @pytest.mark.asyncio
     async def test_list_files_filter_by_folder(
@@ -220,8 +218,8 @@ class TestFileList:
         )
         assert response.status_code == 200
         data = response.json()
-        assert len(data["items"]) == 1
-        assert data["items"][0]["id"] == str(test_file.id)
+        assert len(data) == 1
+        assert data[0]["id"] == str(test_file.id)
 
         # List files in folder
         response = await client.get(
@@ -230,11 +228,11 @@ class TestFileList:
         )
         assert response.status_code == 200
         data = response.json()
-        assert len(data["items"]) == 1
-        assert data["items"][0]["id"] == str(test_file_in_folder.id)
+        assert len(data) == 1
+        assert data[0]["id"] == str(test_file_in_folder.id)
 
     @pytest.mark.asyncio
-    async def test_list_files_pagination(
+    async def test_list_files_returns_all(
         self, client: AsyncClient, auth_headers, test_workspace: Workspace, db_session: AsyncSession
     ):
         for i in range(5):
@@ -247,15 +245,13 @@ class TestFileList:
         await db_session.commit()
 
         response = await client.get(
-            f"/api/workspaces/{test_workspace.id}/files?page=1&page_size=2",
+            f"/api/workspaces/{test_workspace.id}/files",
             headers=auth_headers,
         )
         assert response.status_code == 200
         data = response.json()
-        assert len(data["items"]) == 2
-        assert data["page"] == 1
-        assert data["page_size"] == 2
-        assert data["total"] == 5
+        assert isinstance(data, list)
+        assert len(data) == 5
 
 
 class TestFileGet:

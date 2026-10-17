@@ -1,6 +1,5 @@
 import uuid
 from datetime import datetime
-from typing import Optional
 
 from pydantic import BaseModel, Field
 
@@ -11,8 +10,8 @@ class NoteCreate(BaseModel):
 
 
 class NoteUpdate(BaseModel):
-    title: Optional[str] = Field(None, min_length=1, max_length=300)
-    body: Optional[str] = None
+    title: str | None = Field(None, min_length=1, max_length=300)
+    body: str | None = None
 
 
 class NoteResponse(BaseModel):
@@ -25,10 +24,3 @@ class NoteResponse(BaseModel):
 
     class Config:
         from_attributes = True
-
-
-class NoteListResponse(BaseModel):
-    items: list[NoteResponse]
-    total: int
-    page: int
-    page_size: int

@@ -2,9 +2,7 @@ import pytest
 import pytest_asyncio
 from httpx import AsyncClient
 
-from app.core.security import create_access_token
 from app.models.note import Note
-from app.models.workspace import Workspace
 
 
 @pytest_asyncio.fixture
@@ -125,8 +123,7 @@ class TestNoteList:
         )
         assert response.status_code == 200
         data = response.json()
-        assert data["items"] == []
-        assert data["total"] == 0
+        assert data == []
 
     @pytest.mark.asyncio
     async def test_list_notes_with_data(self, client: AsyncClient, auth_headers, test_note):
@@ -136,26 +133,23 @@ class TestNoteList:
         )
         assert response.status_code == 200
         data = response.json()
-        assert len(data["items"]) == 1
-        assert data["total"] == 1
-        assert data["items"][0]["title"] == test_note.title
+        assert len(data) == 1
+        assert data[0]["title"] == test_note.title
 
     @pytest.mark.asyncio
-    async def test_list_notes_pagination(self, client: AsyncClient, auth_headers, test_workspace, db_session):
+    async def test_list_notes_returns_all(self, client: AsyncClient, auth_headers, test_workspace, db_session):
         for i in range(5):
             db_session.add(Note(workspace_id=test_workspace.id, title=f"Note {i}"))
         await db_session.commit()
 
         response = await client.get(
-            f"/api/workspaces/{test_workspace.id}/notes?page=1&page_size=2",
+            f"/api/workspaces/{test_workspace.id}/notes",
             headers=auth_headers,
         )
         assert response.status_code == 200
         data = response.json()
-        assert len(data["items"]) == 2
-        assert data["page"] == 1
-        assert data["page_size"] == 2
-        assert data["total"] == 5
+        assert isinstance(data, list)
+        assert len(data) == 5
 
     @pytest.mark.asyncio
     async def test_list_notes_ordering(self, client: AsyncClient, auth_headers, test_workspace, db_session):
@@ -171,8 +165,8 @@ class TestNoteList:
         )
         assert response.status_code == 200
         data = response.json()
-        assert len(data["items"]) == 3
-        assert data["items"][0]["title"] == "Note 2"
+        assert len(data) == 3
+        assert data[0]["title"] == "Note 2"
 
 
 class TestNoteGet:

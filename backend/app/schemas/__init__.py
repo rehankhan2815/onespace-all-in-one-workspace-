@@ -16,20 +16,17 @@ from app.schemas.folder import (
 )
 from app.schemas.resource import (
     ResourceCreate,
-    ResourceListResponse,
     ResourceResponse,
     ResourceUpdate,
 )
 from app.schemas.search import SearchResponse
 from app.schemas.task import (
     TaskCreate,
-    TaskListResponse,
     TaskResponse,
     TaskUpdate,
 )
 from app.schemas.workspace import (
     WorkspaceCreate,
-    WorkspaceListResponse,
     WorkspaceResponse,
     WorkspaceUpdate,
 )
@@ -43,19 +40,15 @@ __all__ = [
     "WorkspaceCreate",
     "WorkspaceUpdate",
     "WorkspaceResponse",
-    "WorkspaceListResponse",
     "TaskCreate",
     "TaskUpdate",
     "TaskResponse",
-    "TaskListResponse",
     "NoteCreate",
     "NoteUpdate",
     "NoteResponse",
-    "NoteListResponse",
     "ResourceCreate",
     "ResourceUpdate",
     "ResourceResponse",
-    "ResourceListResponse",
     "FolderCreate",
     "FolderUpdate",
     "FolderResponse",
