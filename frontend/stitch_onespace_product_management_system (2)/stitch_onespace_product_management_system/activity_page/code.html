@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Activity - OneSpace</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-fixed": "#0b1c30",
+                        "surface-variant": "#e5e2e1",
+                        "on-error": "#ffffff",
+                        "surface-container-high": "#ebe7e7",
+                        "secondary-fixed-dim": "#b7c8e1",
+                        "surface-dim": "#dcd9d9",
+                        "on-surface-variant": "#464555",
+                        "primary-container": "#4f46e5",
+                        "surface-tint": "#4d44e3",
+                        "secondary-container": "#d0e1fb",
+                        "inverse-surface": "#313030",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary": "#505f76",
+                        "surface-container-low": "#f6f3f2",
+                        "on-primary-container": "#dad7ff",
+                        "outline": "#777587",
+                        "surface-container": "#f0edec",
+                        "error": "#ba1a1a",
+                        "background": "#fcf9f8",
+                        "inverse-primary": "#c3c0ff",
+                        "error-container": "#ffdad6",
+                        "secondary-fixed": "#d3e4fe",
+                        "on-secondary": "#ffffff",
+                        "on-surface": "#1c1b1b",
+                        "on-tertiary-container": "#ffd2be",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "tertiary": "#7e3000",
+                        "on-background": "#1c1b1b",
+                        "on-primary-fixed": "#0f0069",
+                        "on-tertiary-fixed": "#351000",
+                        "on-tertiary-fixed-variant": "#7b2f00",
+                        "surface": "#fcf9f8",
+                        "on-primary": "#ffffff",
+                        "on-primary-fixed-variant": "#3323cc",
+                        "on-secondary-fixed-variant": "#38485d",
+                        "on-tertiary": "#ffffff",
+                        "primary-fixed": "#e2dfff",
+                        "inverse-on-surface": "#f3f0ef",
+                        "surface-bright": "#fcf9f8",
+                        "on-secondary-container": "#54647a",
+                        "primary": "#3525cd",
+                        "outline-variant": "#c7c4d8",
+                        "tertiary-fixed": "#ffdbcc",
+                        "surface-container-highest": "#e5e2e1",
+                        "tertiary-fixed-dim": "#ffb695",
+                        "on-error-container": "#93000a",
+                        "tertiary-container": "#a44100"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xs": "4px",
+                        "gutter": "24px",
+                        "margin": "24px",
+                        "md": "16px",
+                        "sm": "8px",
+                        "xl": "32px",
+                        "lg": "24px",
+                        "base-unit": "4px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "label-caps": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", { "lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "headline-sm": ["18px", { "lineHeight": "1.4", "fontWeight": "600" }],
+                        "display-lg": ["32px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-caps": ["12px", { "lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "1", "fontWeight": "500" }],
+                        "body-md": ["14px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "body-lg": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .icon-fill {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md h-screen flex overflow-hidden">
+<!-- SideNavBar -->
+<nav class="bg-surface dark:bg-surface-container-low text-primary dark:text-inverse-primary font-body-md text-body-md docked left-0 h-full w-[280px] border-r border-outline-variant dark:border-outline flat no shadows flex-col z-40 hidden md:flex flex-col">
+<div class="p-lg flex flex-col gap-xs border-b border-outline-variant">
+<h1 class="font-display-lg text-display-lg font-bold text-primary dark:text-inverse-primary truncate">OneSpace</h1>
+<p class="text-on-surface-variant text-label-sm truncate">Academic Workspace</p>
+</div>
+<div class="px-md py-lg">
+<button class="w-full bg-primary-container text-on-error h-11 rounded-lg flex items-center justify-center gap-sm font-label-sm hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                New Project
+            </button>
+</div>
+<ul class="flex-1 overflow-y-auto px-sm py-xs space-y-xs">
+<li>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high hover:bg-surface-container-high transition-colors duration-200 rounded-md" href="#">
+<span class="material-symbols-outlined text-[20px]">dashboard</span>
+                    Dashboard
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high hover:bg-surface-container-high transition-colors duration-200 rounded-md" href="#">
+<span class="material-symbols-outlined text-[20px]">checklist</span>
+                    Tasks
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high hover:bg-surface-container-high transition-colors duration-200 rounded-md" href="#">
+<span class="material-symbols-outlined text-[20px]">description</span>
+                    Notes
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high hover:bg-surface-container-high transition-colors duration-200 rounded-md" href="#">
+<span class="material-symbols-outlined text-[20px]">menu_book</span>
+                    Resources
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high hover:bg-surface-container-high transition-colors duration-200 rounded-md" href="#">
+<span class="material-symbols-outlined text-[20px]">folder</span>
+                    Files
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high hover:bg-surface-container-high transition-colors duration-200 rounded-md" href="#">
+<span class="material-symbols-outlined text-[20px]">search</span>
+                    Search
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-sm bg-secondary-container text-on-secondary-container border-l-4 border-primary rounded-r-md opacity-90 transition-all" href="#">
+<span class="material-symbols-outlined text-[20px] icon-fill">switch_account</span>
+                    Activity
+                </a>
+</li>
+</ul>
+<div class="mt-auto border-t border-outline-variant p-sm">
+<ul class="space-y-xs">
+<li>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200 rounded-md" href="#">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+                        Settings
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200 rounded-md" href="#">
+<span class="material-symbols-outlined text-[20px]">help</span>
+                        Support
+                    </a>
+</li>
+</ul>
+</div>
+</nav>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col h-full overflow-hidden relative">
+<!-- Top App Bar (Mobile Nav Alternative) -->
+<header class="bg-surface/80 backdrop-blur-md flex justify-between items-center w-full px-lg sticky top-0 z-50 h-16 border-b border-outline-variant md:hidden">
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary">OneSpace</h1>
+<div class="flex gap-sm">
+<button class="text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high rounded-full p-2 transition-all active:scale-95 duration-150">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+</header>
+<div class="flex-1 overflow-y-auto p-margin md:p-xl">
+<div class="max-w-4xl mx-auto w-full">
+<!-- Page Header & Breadcrumb -->
+<div class="mb-xl flex flex-col sm:flex-row sm:items-center justify-between gap-md">
+<div>
+<div class="flex items-center gap-sm text-on-surface-variant font-label-sm mb-xs">
+<span class="w-2 h-2 rounded-full bg-tertiary-container inline-block"></span>
+<span>Advanced Physics Research</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span>Activity</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-surface">Activity Log</h2>
+</div>
+<!-- Filter -->
+<div class="relative">
+<select class="appearance-none bg-surface border border-outline-variant text-on-surface font-label-sm py-2 pl-4 pr-10 rounded-lg focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary cursor-pointer shadow-sm hover:bg-surface-container-low transition-colors w-full sm:w-auto">
+<option value="all">All Activity</option>
+<option value="tasks">Tasks</option>
+<option value="notes">Notes</option>
+<option value="resources">Resources</option>
+<option value="files">Files</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant text-[18px]">expand_more</span>
+</div>
+</div>
+<!-- Timeline Container -->
+<div class="relative before:absolute before:inset-0 before:ml-[1.7rem] md:before:ml-[2.2rem] before:-translate-x-px before:h-full before:w-px before:bg-outline-variant before:z-0 space-y-xl">
+<!-- Today Group -->
+<div class="relative z-10">
+<div class="flex items-center gap-md mb-md">
+<div class="bg-surface border border-outline-variant text-on-surface-variant font-label-caps px-3 py-1 rounded-full shadow-sm">Today</div>
+</div>
+<div class="space-y-md ml-[3.5rem] md:ml-[4.5rem]">
+<!-- Activity Item 1 -->
+<div class="bg-surface border border-outline-variant rounded-xl p-md shadow-sm hover:shadow-md transition-shadow relative group">
+<!-- Timeline Node -->
+<div class="absolute -left-[3.5rem] md:-left-[4.5rem] top-4 w-8 h-8 rounded-full bg-secondary-container border-2 border-surface flex items-center justify-center text-on-secondary-container z-10 shadow-sm group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-[16px] icon-fill">task_alt</span>
+</div>
+<div class="flex flex-col sm:flex-row justify-between gap-sm items-start sm:items-center mb-sm">
+<div class="flex items-center gap-sm">
+<span class="font-label-sm text-on-surface-variant">2 hours ago</span>
+<span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+<span class="bg-primary-container text-on-error font-label-caps px-2 py-0.5 rounded-full text-[10px]">High Priority</span>
+</div>
+</div>
+<p class="text-on-surface font-body-md mb-sm">You completed the task <span class="font-medium">"Review Q3 Research Paper Draft"</span>.</p>
+<button class="text-primary font-label-sm flex items-center gap-xs hover:underline mt-sm">
+                                    Jump to Task
+                                    <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</button>
+</div>
+<!-- Activity Item 2 -->
+<div class="bg-surface border border-outline-variant rounded-xl p-md shadow-sm hover:shadow-md transition-shadow relative group">
+<div class="absolute -left-[3.5rem] md:-left-[4.5rem] top-4 w-8 h-8 rounded-full bg-surface-container-high border-2 border-surface flex items-center justify-center text-on-surface-variant z-10 shadow-sm group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-[16px]">description</span>
+</div>
+<div class="flex flex-col sm:flex-row justify-between gap-sm items-start sm:items-center mb-sm">
+<span class="font-label-sm text-on-surface-variant">10:30 AM</span>
+</div>
+<p class="text-on-surface font-body-md mb-sm">You added a new note <span class="font-medium">"Lab Observations: Superconductivity Tests"</span>.</p>
+<button class="text-primary font-label-sm flex items-center gap-xs hover:underline mt-sm">
+                                    Continue Writing
+                                    <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Yesterday Group -->
+<div class="relative z-10">
+<div class="flex items-center gap-md mb-md">
+<div class="bg-surface border border-outline-variant text-on-surface-variant font-label-caps px-3 py-1 rounded-full shadow-sm">Yesterday</div>
+</div>
+<div class="space-y-md ml-[3.5rem] md:ml-[4.5rem]">
+<!-- Activity Item 3 -->
+<div class="bg-surface border border-outline-variant rounded-xl p-md shadow-sm hover:shadow-md transition-shadow relative group">
+<div class="absolute -left-[3.5rem] md:-left-[4.5rem] top-4 w-8 h-8 rounded-full bg-surface-container-high border-2 border-surface flex items-center justify-center text-on-surface-variant z-10 shadow-sm group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-[16px]">folder</span>
+</div>
+<div class="flex flex-col sm:flex-row justify-between gap-sm items-start sm:items-center mb-sm">
+<span class="font-label-sm text-on-surface-variant">4:15 PM</span>
+</div>
+<p class="text-on-surface font-body-md mb-sm">You uploaded <span class="font-medium">"quantum_data_v2.csv"</span> to the project files.</p>
+<div class="mt-sm p-sm bg-surface-container-low rounded-lg border border-outline-variant/50 flex items-center gap-sm w-fit">
+<span class="material-symbols-outlined text-on-surface-variant text-[18px]">table_chart</span>
+<span class="font-label-sm text-on-surface">quantum_data_v2.csv</span>
+<span class="text-on-surface-variant font-label-sm text-[10px] ml-sm">2.4 MB</span>
+</div>
+</div>
+<!-- Activity Item 4 -->
+<div class="bg-surface border border-outline-variant rounded-xl p-md shadow-sm hover:shadow-md transition-shadow relative group">
+<div class="absolute -left-[3.5rem] md:-left-[4.5rem] top-4 w-8 h-8 rounded-full bg-surface-container-high border-2 border-surface flex items-center justify-center text-on-surface-variant z-10 shadow-sm group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-[16px]">link</span>
+</div>
+<div class="flex flex-col sm:flex-row justify-between gap-sm items-start sm:items-center mb-sm">
+<span class="font-label-sm text-on-surface-variant">1:00 PM</span>
+</div>
+<p class="text-on-surface font-body-md mb-sm">You added a new resource link <span class="font-medium">"MIT OpenCourseWare: Quantum Physics"</span>.</p>
+</div>
+</div>
+</div>
+<!-- Bottom spacing for scroll -->
+<div class="h-12"></div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Nav (Mobile) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-2 bg-surface dark:bg-inverse-surface border-t border-outline-variant shadow-lg md:hidden">
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container-high rounded-xl" href="#">
+<span class="material-symbols-outlined text-[24px]">home</span>
+<span class="font-label-sm text-label-sm mt-1">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container-high rounded-xl" href="#">
+<span class="material-symbols-outlined text-[24px]">task_alt</span>
+<span class="font-label-sm text-label-sm mt-1">Tasks</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container-high rounded-xl" href="#">
+<span class="material-symbols-outlined text-[24px]">folder_open</span>
+<span class="font-label-sm text-label-sm mt-1">Files</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container-high rounded-xl" href="#">
+<span class="material-symbols-outlined text-[24px]">search</span>
+<span class="font-label-sm text-label-sm mt-1">Search</span>
+</a>
+</nav>
+</body></html>
