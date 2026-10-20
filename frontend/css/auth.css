@@ -1,0 +1,24 @@
+/* Auth page styles - Tailwind compatible */
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fcf9f8;
+  padding: 1rem;
+}
+.auth-card {
+  width: 100%;
+  max-width: 420px;
+}
+.auth-header { text-align: center; margin-bottom: 1.5rem; }
+.auth-header .logo { font-size: 1.75rem; font-weight: 700; color: #3525cd; }
+.auth-header .tagline { color: #464555; margin-top: 0.25rem; }
+.auth-form .form-label { font-weight: 500; }
+.auth-form .form-control:focus {
+  border-color: #3525cd;
+  box-shadow: 0 0 0 2px rgba(53, 37, 205, 0.2);
+}
+.auth-footer { text-align: center; margin-top: 1rem; color: #464555; }
+.auth-footer a { color: #3525cd; text-decoration: none; }
+.auth-footer a:hover { text-decoration: underline; }
